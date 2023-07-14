@@ -10,7 +10,7 @@
       "item": "minecraft:iron_bars"
     },
     "/": {
-      "item": "minecraft:soul_sand"
+      "item": "spawners_utilities:soul_container"
     }
   },
   "result": {

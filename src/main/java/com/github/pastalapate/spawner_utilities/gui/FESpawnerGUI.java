@@ -102,9 +102,15 @@ public class FESpawnerGUI extends Container {
             RenderSystem.defaultBlendFunc();
             assert this.minecraft != null;
             this.minecraft.getTextureManager().bind(texture);
+            int offsetX = (width - imageWidth) / 2;
+            int offsetY = (height - imageHeight) / 2;
             int k = (this.width - this.xSize) / 2;
             int l = (this.height - this.ySize) / 2;
             blit(ms, k, l, 0, 0, this.xSize, this.ySize, this.xSize, this.ySize);
+            int slotX = 86 + offsetX;
+            int slotY = 60 + offsetY;
+            int slotSize = 16;
+            fill(ms, slotX, slotY, slotX + slotSize, slotY + slotSize, 0xFF9F9F9F);
             RenderSystem.disableBlend();
         }
 

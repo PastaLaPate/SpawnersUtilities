@@ -1,6 +1,7 @@
 package com.github.pastalapate.spawner_utilities.networking;
 
 import com.github.pastalapate.spawner_utilities.Main;
+import com.github.pastalapate.spawner_utilities.networking.packets.DamageSyncC2SPacket;
 import com.github.pastalapate.spawner_utilities.networking.packets.EnergySyncS2CPacket;
 import com.github.pastalapate.spawner_utilities.networking.packets.ItemStackSyncS2CPacket;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -38,6 +39,12 @@ public class ModMessages {
                 .decoder(ItemStackSyncS2CPacket::new)
                 .encoder(ItemStackSyncS2CPacket::toBytes)
                 .consumer(ItemStackSyncS2CPacket::handle)
+                .add();
+
+        net.messageBuilder(DamageSyncC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(DamageSyncC2SPacket::new)
+                .encoder(DamageSyncC2SPacket::toBytes)
+                .consumer(DamageSyncC2SPacket::handle)
                 .add();
     }
 

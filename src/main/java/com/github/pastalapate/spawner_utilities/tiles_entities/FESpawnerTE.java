@@ -12,8 +12,11 @@ import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
@@ -29,6 +32,8 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -125,6 +130,11 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider ,
         }
     }
 
+    @SubscribeEvent
+    public void onBlockBreak(BlockEvent.BreakEvent event) {
+
+    }
+
     @Override
     public void onLoad() {
         super.onLoad();
@@ -170,6 +180,13 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider ,
         }
 
         return super.getCapability(cap, side);
+    }
+
+    public void drops() {
+        for (int i = 0; i < itemHandler.getSlots(); i++) {
+            assert this.level != null;
+            this.level.addFreshEntity(new ItemEntity(level, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(),itemHandler.getStackInSlot(i)));
+        }
     }
 
     @Override

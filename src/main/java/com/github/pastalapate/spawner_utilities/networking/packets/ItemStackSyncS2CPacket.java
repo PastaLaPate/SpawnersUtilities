@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Supplier;
 
-public class ItemStackSyncS2CPacket {
+public class ItemStackSyncS2CPacket implements IPacket {
     private final ItemStackHandler itemStackHandler;
     private final BlockPos pos;
 

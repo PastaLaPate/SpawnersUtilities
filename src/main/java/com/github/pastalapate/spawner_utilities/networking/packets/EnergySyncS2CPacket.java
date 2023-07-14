@@ -9,7 +9,7 @@ import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class EnergySyncS2CPacket {
+public class EnergySyncS2CPacket implements IPacket {
     private final int energy;
     private final BlockPos pos;
 

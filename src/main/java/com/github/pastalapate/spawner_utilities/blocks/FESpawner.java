@@ -1,7 +1,7 @@
 package com.github.pastalapate.spawner_utilities.blocks;
 
 import com.github.pastalapate.spawner_utilities.init.ModTileEntities;
-import com.github.pastalapate.spawner_utilities.tiles_entities.fe_spawner_TE;
+import com.github.pastalapate.spawner_utilities.tiles_entities.FESpawnerTE;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
@@ -21,9 +21,9 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-public class fe_spawner extends Block  {
+public class FESpawner extends Block  {
 
-    public fe_spawner() {
+    public FESpawner() {
         super(AbstractBlock.Properties.of(Material.GLASS).strength(3f, 15f).harvestTool(ToolType.PICKAXE).harvestLevel(2).requiresCorrectToolForDrops());
     }
 
@@ -37,8 +37,8 @@ public class fe_spawner extends Block  {
     public ActionResultType use(BlockState blockState, World world, BlockPos blockPos, PlayerEntity player, Hand p_225533_5_, BlockRayTraceResult p_225533_6_) {
         if (!world.isClientSide) {
             TileEntity tileentity = world.getBlockEntity(blockPos);
-            if (tileentity instanceof fe_spawner_TE) {
-                NetworkHooks.openGui((ServerPlayerEntity) player, (fe_spawner_TE) tileentity, blockPos);
+            if (tileentity instanceof FESpawnerTE) {
+                NetworkHooks.openGui((ServerPlayerEntity) player, (FESpawnerTE) tileentity, blockPos);
             }
         }
         return ActionResultType.SUCCESS;

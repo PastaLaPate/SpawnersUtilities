@@ -1,6 +1,6 @@
 package com.github.pastalapate.spawner_utilities.networking.packets;
 
-import com.github.pastalapate.spawner_utilities.tiles_entities.fe_spawner_TE;
+import com.github.pastalapate.spawner_utilities.tiles_entities.FESpawnerTE;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
@@ -48,8 +48,8 @@ public class ItemStackSyncS2CPacket {
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
-            if (Minecraft.getInstance().level.getBlockEntity(pos) instanceof fe_spawner_TE) {
-                fe_spawner_TE blockEntity = (fe_spawner_TE) Minecraft.getInstance().level.getBlockEntity(pos);
+            if (Minecraft.getInstance().level.getBlockEntity(pos) instanceof FESpawnerTE) {
+                FESpawnerTE blockEntity = (FESpawnerTE) Minecraft.getInstance().level.getBlockEntity(pos);
                 blockEntity.setHandler(this.itemStackHandler);
             }
         });

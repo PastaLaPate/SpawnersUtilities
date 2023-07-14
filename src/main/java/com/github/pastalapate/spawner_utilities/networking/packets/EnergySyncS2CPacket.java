@@ -1,7 +1,7 @@
 package com.github.pastalapate.spawner_utilities.networking.packets;
 
 import com.github.pastalapate.spawner_utilities.gui.FESpawnerGUI;
-import com.github.pastalapate.spawner_utilities.tiles_entities.fe_spawner_TE;
+import com.github.pastalapate.spawner_utilities.tiles_entities.FESpawnerTE;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
@@ -32,8 +32,8 @@ public class EnergySyncS2CPacket {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             assert Minecraft.getInstance().level != null;
-            if(Minecraft.getInstance().level.getBlockEntity(pos) instanceof fe_spawner_TE) {
-                fe_spawner_TE blockEntity = (fe_spawner_TE) Minecraft.getInstance().level.getBlockEntity(pos);
+            if(Minecraft.getInstance().level.getBlockEntity(pos) instanceof FESpawnerTE) {
+                FESpawnerTE blockEntity = (FESpawnerTE) Minecraft.getInstance().level.getBlockEntity(pos);
                 blockEntity.setEnergyLevel(energy);
 
                 if(Minecraft.getInstance().player.containerMenu instanceof FESpawnerGUI &&

@@ -4,7 +4,6 @@ import com.github.pastalapate.spawner_utilities.init.ModGroup;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,14 +14,13 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-public class Spawner_info extends Item {
-    public Spawner_info() {
+public class SpawnerInfo extends Item {
+    public SpawnerInfo() {
         super(new Properties().tab(ModGroup.instance).stacksTo(1));
     }
 

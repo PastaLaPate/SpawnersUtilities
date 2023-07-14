@@ -3,7 +3,7 @@ package com.github.pastalapate.spawner_utilities.gui;
 import com.github.pastalapate.spawner_utilities.Main;
 import com.github.pastalapate.spawner_utilities.gui.utils.MouseUtils;
 import com.github.pastalapate.spawner_utilities.init.ModContainerType;
-import com.github.pastalapate.spawner_utilities.tiles_entities.fe_spawner_TE;
+import com.github.pastalapate.spawner_utilities.tiles_entities.FESpawnerTE;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
@@ -17,21 +17,18 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
-import org.apache.logging.log4j.message.Message;
 
 import java.util.Objects;
-import java.util.Optional;
 
 public class FESpawnerGUI extends Container {
 
-    public final fe_spawner_TE tileEntity;
+    public final FESpawnerTE tileEntity;
     public int x, y, z;
     public final PlayerEntity entity;
     public final World world;
@@ -42,7 +39,7 @@ public class FESpawnerGUI extends Container {
         this(windowId, playerInventory, getTileEntity(playerInventory, data), data);
     }
 
-    public FESpawnerGUI(final int windowId, final PlayerInventory inv, final fe_spawner_TE tileEntity, final PacketBuffer extraData) {
+    public FESpawnerGUI(final int windowId, final PlayerInventory inv, final FESpawnerTE tileEntity, final PacketBuffer extraData) {
         super(ModContainerType.FESpawnerGUI.get(), windowId);
         this.tileEntity = tileEntity;
         this.entity = inv.player;
@@ -68,12 +65,12 @@ public class FESpawnerGUI extends Container {
         return true;
     }
 
-    private static fe_spawner_TE getTileEntity(final PlayerInventory playerInventory, final PacketBuffer data) {
+    private static FESpawnerTE getTileEntity(final PlayerInventory playerInventory, final PacketBuffer data) {
         Objects.requireNonNull(playerInventory, "playerInventory cannot be null!");
         Objects.requireNonNull(data, "data cannot be null!");
         final TileEntity tileAtPos = playerInventory.player.getCommandSenderWorld().getBlockEntity(data.readBlockPos());
-        if (tileAtPos instanceof fe_spawner_TE)
-            return (fe_spawner_TE) tileAtPos;
+        if (tileAtPos instanceof FESpawnerTE)
+            return (FESpawnerTE) tileAtPos;
         throw new IllegalStateException("Tile entity is not correct! " + tileAtPos);
     }
 
@@ -83,7 +80,7 @@ public class FESpawnerGUI extends Container {
         private int x, y, z;
         private int xSize, ySize;
         private PlayerEntity entity;
-        private fe_spawner_TE tileentity;
+        private FESpawnerTE tileentity;
 
         public FESpawnerScreen(FESpawnerGUI container, PlayerInventory inventory, ITextComponent text) {
             super(container, inventory, text);

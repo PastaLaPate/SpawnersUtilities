@@ -1,6 +1,5 @@
 package com.github.pastalapate.spawner_utilities.tiles_entities;
 
-import com.github.pastalapate.spawner_utilities.Main;
 import com.github.pastalapate.spawner_utilities.energy.ModEnergyStorage;
 import com.github.pastalapate.spawner_utilities.gui.FESpawnerGUI;
 import com.github.pastalapate.spawner_utilities.init.ModItems;
@@ -15,8 +14,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
@@ -35,14 +32,12 @@ import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Objects;
 import java.util.Random;
 
-public class fe_spawner_TE extends TileEntity implements INamedContainerProvider ,ITickableTileEntity {
+public class FESpawnerTE extends TileEntity implements INamedContainerProvider ,ITickableTileEntity {
 
     public ModEnergyStorage energyStorage;
 
@@ -72,7 +67,7 @@ public class fe_spawner_TE extends TileEntity implements INamedContainerProvider
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
     int spawnRange = 5;
 
-    public fe_spawner_TE() {
+    public FESpawnerTE() {
         super(ModTileEntities.FE_SPAWNER.get());
         this.energyStorage = new ModEnergyStorage(100_000, 300) {
             @Override
@@ -94,7 +89,6 @@ public class fe_spawner_TE extends TileEntity implements INamedContainerProvider
         assert this.level != null;
         ItemStack item = itemHandler.getStackInSlot(0);
         boolean empty = item.isEmpty();
-
         if (item.isEmpty() || !item.getDescriptionId().equals(ModItems.SOUL_CONTAINER.get().getDescriptionId()) || item.getTag() == null || item.getTag().getString("entity") == null) {
             return;
         }

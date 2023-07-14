@@ -35,6 +35,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Random;
 
 public class FESpawnerTE extends TileEntity implements INamedContainerProvider ,ITickableTileEntity {
@@ -45,6 +46,7 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider ,
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
+            assert level != null;
             if(!level.isClientSide()) {
                 ModMessages.sendToClients(new ItemStackSyncS2CPacket(this, worldPosition));
             }
@@ -89,8 +91,10 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider ,
         assert this.level != null;
         ItemStack item = itemHandler.getStackInSlot(0);
         boolean empty = item.isEmpty();
-        if (item.isEmpty() || !item.getDescriptionId().equals(ModItems.SOUL_CONTAINER.get().getDescriptionId()) || item.getTag() == null || item.getTag().getString("entity") == null) {
+        if (empty || !item.getDescriptionId().equals(ModItems.SOUL_CONTAINER.get().getDescriptionId()) || item.getTag() == null) {
             return;
+        } else {
+            item.getTag().getString("entity");
         }
         entityType = EntityType.byString(item.getTag().getString("entity")).orElse(null);
         active = energyStorage.getEnergyStored() >= 100 && entityType != null;
@@ -136,6 +140,7 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider ,
     }
 
     @Override
+    @MethodsReturnNonnullByDefault
     public CompoundNBT save(CompoundNBT nbt) {
         nbt.put("inventory", itemHandler.serializeNBT());
         nbt.putInt("fe_spawner.energy", energyStorage.getEnergyStored());
@@ -144,6 +149,7 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider ,
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void load(BlockState blockState, CompoundNBT nbt) {
         this.itemHandler.deserializeNBT(nbt.getCompound("inventory"));
         this.energyStorage.setEnergy(nbt.getInt("fe_spawner.energy"));
@@ -174,6 +180,7 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider ,
 
     @Nullable
     @Override
+    @ParametersAreNonnullByDefault
     public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_) {
         PacketBuffer extraData = new PacketBuffer(Unpooled.buffer());
         extraData.writeBlockPos(this.getBlockPos()); // Write the BlockPos data to the buffer

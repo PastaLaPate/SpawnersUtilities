@@ -1,5 +1,6 @@
 package com.github.pastalapate.spawner_utilities.init;
 
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 
@@ -12,6 +13,7 @@ public class ModGroup extends ItemGroup {
     }
 
     @Override
+    @MethodsReturnNonnullByDefault
     public ItemStack makeIcon() {
         return new ItemStack(ModItems.SPAWNER_INFO.get());
     }

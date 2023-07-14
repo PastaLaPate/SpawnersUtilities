@@ -15,8 +15,6 @@ import javax.annotation.Nullable;
 
 public class InfinityEnergyBlock extends Block {
 
-    private LazyOptional<IEnergyStorage> energyHandler = LazyOptional.empty();
-
     public InfinityEnergyBlock() {
         super(AbstractBlock.Properties.of(Material.STONE).noDrops().instabreak());
     }

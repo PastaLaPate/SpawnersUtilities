@@ -48,8 +48,10 @@ public class ItemStackSyncS2CPacket {
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
+            assert Minecraft.getInstance().level != null;
             if (Minecraft.getInstance().level.getBlockEntity(pos) instanceof FESpawnerTE) {
                 FESpawnerTE blockEntity = (FESpawnerTE) Minecraft.getInstance().level.getBlockEntity(pos);
+                assert blockEntity != null;
                 blockEntity.setHandler(this.itemStackHandler);
             }
         });

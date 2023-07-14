@@ -34,8 +34,10 @@ public class EnergySyncS2CPacket {
             assert Minecraft.getInstance().level != null;
             if(Minecraft.getInstance().level.getBlockEntity(pos) instanceof FESpawnerTE) {
                 FESpawnerTE blockEntity = (FESpawnerTE) Minecraft.getInstance().level.getBlockEntity(pos);
+                assert blockEntity != null;
                 blockEntity.setEnergyLevel(energy);
 
+                assert Minecraft.getInstance().player != null;
                 if(Minecraft.getInstance().player.containerMenu instanceof FESpawnerGUI &&
                         ((FESpawnerGUI) Minecraft.getInstance().player.containerMenu).tileEntity.getBlockPos().equals(pos)) {
                     blockEntity.setEnergyLevel(energy);

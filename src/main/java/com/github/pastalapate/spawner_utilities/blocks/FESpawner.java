@@ -20,6 +20,7 @@ import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 public class FESpawner extends Block  {
 
@@ -34,6 +35,7 @@ public class FESpawner extends Block  {
 
     @Override
     @MethodsReturnNonnullByDefault
+    @ParametersAreNonnullByDefault
     public ActionResultType use(BlockState blockState, World world, BlockPos blockPos, PlayerEntity player, Hand p_225533_5_, BlockRayTraceResult p_225533_6_) {
         if (!world.isClientSide) {
             TileEntity tileentity = world.getBlockEntity(blockPos);

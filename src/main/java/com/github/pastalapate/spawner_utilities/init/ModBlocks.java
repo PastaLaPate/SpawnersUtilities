@@ -19,9 +19,9 @@ public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Main.MOD_ID);
 
     public static final RegistryObject<Block> FE_SPAWNER = createBlock("fe_spawner",
-            () -> new FESpawner(), ModGroup.instance);
+            FESpawner::new, ModGroup.instance);
 
-    public static final RegistryObject<Block> INFINITY_ENERGY_BLOCK = createBlock("infinity_energy_block", () -> new InfinityEnergyBlock(), ModGroup.instance);
+    public static final RegistryObject<Block> INFINITY_ENERGY_BLOCK = createBlock("infinity_energy_block", InfinityEnergyBlock::new, ModGroup.instance);
 
     public static RegistryObject<Block> createBlock(String name, Supplier<? extends Block> supplier, ItemGroup group) {
         RegistryObject<Block> block = BLOCKS.register(name, supplier);

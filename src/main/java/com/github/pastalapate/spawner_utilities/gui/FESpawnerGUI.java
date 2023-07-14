@@ -20,10 +20,9 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
 public class FESpawnerGUI extends Container {
@@ -32,7 +31,6 @@ public class FESpawnerGUI extends Container {
     public int x, y, z;
     public final PlayerEntity entity;
     public final World world;
-    private IItemHandler internal;
 
 
     public FESpawnerGUI(final int windowId, final PlayerInventory playerInventory, final PacketBuffer data) {
@@ -47,13 +45,12 @@ public class FESpawnerGUI extends Container {
         this.y = (int) entity.getY();
         this.z = (int) entity.getZ();
         this.world = entity.level;
-        this.internal = new ItemStackHandler(1);
 
         int si;
         int sj;
         for (si = 0; si < 3; ++si)
             for (sj = 0; sj < 9; ++sj)
-                this.addSlot(new Slot(inv, sj + (si + 1) * 9, 8 + sj * 18, 0 + 84 + si * 18));
+                this.addSlot(new Slot(inv, sj + (si + 1) * 9, 8 + sj * 18, 84 + si * 18));
         for (si = 0; si < 9; ++si)
             this.addSlot(new Slot(inv, si, 8 + si * 18, 142));
 
@@ -61,6 +58,7 @@ public class FESpawnerGUI extends Container {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean stillValid(PlayerEntity p_75145_1_) {
         return true;
     }
@@ -76,19 +74,11 @@ public class FESpawnerGUI extends Container {
 
     @OnlyIn(Dist.CLIENT)
     public static class FESpawnerScreen extends ContainerScreen<FESpawnerGUI> {
-        private World world;
-        private int x, y, z;
-        private int xSize, ySize;
-        private PlayerEntity entity;
-        private FESpawnerTE tileentity;
+        private final int xSize, ySize;
+        private final FESpawnerTE tileentity;
 
         public FESpawnerScreen(FESpawnerGUI container, PlayerInventory inventory, ITextComponent text) {
             super(container, inventory, text);
-            this.world = container.world;
-            this.x = container.x;
-            this.y = container.y;
-            this.z = container.z;
-            this.entity = container.entity;
             this.xSize = 176;
             this.ySize = 166;
             this.tileentity = container.tileEntity;
@@ -97,6 +87,7 @@ public class FESpawnerGUI extends Container {
         private static final ResourceLocation texture = new ResourceLocation(Main.MOD_ID, "textures/screens/fespawner.png");
 
         @Override
+        @ParametersAreNonnullByDefault
         public void render(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
             this.renderBackground(ms);
             super.render(ms, mouseX, mouseY, partialTicks);
@@ -104,10 +95,12 @@ public class FESpawnerGUI extends Container {
         }
 
         @Override
+        @ParametersAreNonnullByDefault
         protected void renderBg(MatrixStack ms, float partialTicks, int gx, int gy) {
             RenderSystem.color4f(1, 1, 1, 1);
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
+            assert this.minecraft != null;
             this.minecraft.getTextureManager().bind(texture);
             int k = (this.width - this.xSize) / 2;
             int l = (this.height - this.ySize) / 2;
@@ -127,6 +120,8 @@ public class FESpawnerGUI extends Container {
         @Override
         public boolean keyPressed(int key, int b, int c) {
             if (key == 256) {
+                assert Objects.requireNonNull(this.minecraft).player != null;
+                assert this.minecraft.player != null;
                 this.minecraft.player.closeContainer();
                 return true;
             }
@@ -139,6 +134,7 @@ public class FESpawnerGUI extends Container {
         }
 
         @Override
+        @ParametersAreNonnullByDefault
         protected void renderLabels(MatrixStack ms, int mouseX, int mouseY) {
             int energyStored = tileentity.energyStorage.getEnergyStored();
             int maxEnergyStored = tileentity.energyStorage.getMaxEnergyStored();
@@ -165,10 +161,6 @@ public class FESpawnerGUI extends Container {
             }
         }
 
-        private boolean isInRect(int x, int y, int width, int height, int mouseX, int mouseY) {
-            return mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height;
-        }
-
         @Override
         public void onClose() {
             super.onClose();
@@ -176,6 +168,7 @@ public class FESpawnerGUI extends Container {
         }
 
         @Override
+        @ParametersAreNonnullByDefault
         public void init(Minecraft minecraft, int width, int height) {
             super.init(minecraft, width, height);
             minecraft.keyboardHandler.setSendRepeatsToGui(true);

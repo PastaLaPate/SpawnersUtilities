@@ -10,6 +10,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 public class SoulContainer extends Item {
@@ -18,6 +19,7 @@ public class SoulContainer extends Item {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
         super.appendHoverText(stack, world, tooltip, flag);
 

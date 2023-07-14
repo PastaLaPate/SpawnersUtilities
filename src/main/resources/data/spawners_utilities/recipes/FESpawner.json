@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XIX",
+    "I#I",
+    "XIX"
+  ],
+  "key": {
+    "#": {
+      "item": "spawner_utilities:spawner_base"
+    },
+    "X": {
+      "tag": "forge:ingot/copper"
+    },
+    "I": {
+      "tag": "forge:ingot/iron"
+    }
+  },
+  "result": {
+    "item": "spawner_utilities:fe_spawner"
+  }
+}

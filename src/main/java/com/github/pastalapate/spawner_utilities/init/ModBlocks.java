@@ -3,7 +3,10 @@ package com.github.pastalapate.spawner_utilities.init;
 import com.github.pastalapate.spawner_utilities.Main;
 import com.github.pastalapate.spawner_utilities.blocks.InfinityEnergyBlock;
 import com.github.pastalapate.spawner_utilities.blocks.FESpawner;
+import com.github.pastalapate.spawner_utilities.blocks.SpawnerBase;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -23,6 +26,7 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> INFINITY_ENERGY_BLOCK = createBlock("infinity_energy_block", InfinityEnergyBlock::new, ModGroup.instance);
 
+    public static final RegistryObject<Block> SPAWNER_BASE = createBlock("spawner_base", SpawnerBase::new, ModGroup.instance);
     public static RegistryObject<Block> createBlock(String name, Supplier<? extends Block> supplier, ItemGroup group) {
         RegistryObject<Block> block = BLOCKS.register(name, supplier);
         ModItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties().tab(group)));

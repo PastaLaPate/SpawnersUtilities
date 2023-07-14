@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#/#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:iron_bars"
+    },
+    "/": {
+      "item": "minecraft:soul_sand"
+    }
+  },
+  "result": {
+    "item": "spawner_utilities:spawner_base"
+  }
+}

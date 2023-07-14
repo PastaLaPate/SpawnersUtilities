@@ -7,16 +7,16 @@
   ],
   "key": {
     "#": {
-      "item": "spawner_utilities:spawner_base"
+      "item": "spawners_utilities:spawner_base"
     },
     "X": {
-      "tag": "forge:ingot/copper"
+      "tag": "forge:ingots/copper"
     },
     "I": {
-      "tag": "forge:ingot/iron"
+      "tag": "forge:ingots/iron"
     }
   },
   "result": {
-    "item": "spawner_utilities:fe_spawner"
+    "item": "spawners_utilities:fe_spawner"
   }
 }

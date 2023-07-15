@@ -7,6 +7,8 @@ import com.github.pastalapate.spawner_utilities.init.ModItems;
 import com.github.pastalapate.spawner_utilities.init.ModTileEntities;
 import com.github.pastalapate.spawner_utilities.networking.ModMessages;
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -43,6 +45,7 @@ public class Main
     }
 
     private void clientSetup(FMLClientSetupEvent e) {
+        RenderTypeLookup.setRenderLayer(ModBlocks.FE_SPAWNER.get(), RenderType.translucent());
         ScreenManager.register(ModContainerType.FESpawnerGUI.get(), FESpawnerGUI.FESpawnerScreen::new);
     }
 }

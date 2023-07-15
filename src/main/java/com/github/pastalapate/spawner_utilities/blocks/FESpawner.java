@@ -3,9 +3,7 @@ package com.github.pastalapate.spawner_utilities.blocks;
 import com.github.pastalapate.spawner_utilities.init.ModTileEntities;
 import com.github.pastalapate.spawner_utilities.tiles_entities.FESpawnerTE;
 import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -25,7 +23,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class FESpawner extends Block  {
 
     public FESpawner() {
-        super(AbstractBlock.Properties.of(Material.GLASS).strength(3f, 15f).harvestTool(ToolType.PICKAXE).harvestLevel(2).requiresCorrectToolForDrops());
+        super(AbstractBlock.Properties.of(Material.GLASS).noOcclusion().strength(3f, 15f).harvestTool(ToolType.PICKAXE).harvestLevel(2).requiresCorrectToolForDrops().isViewBlocking((a,b,c) -> false));
     }
 
     @Override
@@ -60,5 +58,11 @@ public class FESpawner extends Block  {
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return ModTileEntities.FE_SPAWNER.get().create();
+    }
+
+    @Override
+    @MethodsReturnNonnullByDefault
+    public BlockRenderType getRenderShape(BlockState p_149645_1_) {
+        return BlockRenderType.MODEL;
     }
 }

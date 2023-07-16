@@ -46,6 +46,7 @@ public class Main
 
     private void clientSetup(FMLClientSetupEvent e) {
         RenderTypeLookup.setRenderLayer(ModBlocks.FE_SPAWNER.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.SPAWNER_BASE.get(), RenderType.translucent());
         ScreenManager.register(ModContainerType.FESpawnerGUI.get(), FESpawnerGUI.FESpawnerScreen::new);
     }
 }

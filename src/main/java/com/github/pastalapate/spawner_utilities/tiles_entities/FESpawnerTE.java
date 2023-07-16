@@ -15,8 +15,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
@@ -43,29 +41,11 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Random;
 
-public class FESpawnerTE extends TileEntity implements INamedContainerProvider ,ITickableTileEntity {
+public class FESpawnerTE extends TileEntity implements INamedContainerProvider, ITickableTileEntity {
 
     public ModEnergyStorage energyStorage;
 
-    public final ItemStackHandler itemHandler = new ItemStackHandler(1){
-        @Override
-        protected void onContentsChanged(int slot) {
-            setChanged();
-            assert level != null;
-            if(!level.isClientSide()) {
-                ModMessages.sendToClients(new ItemStackSyncS2CPacket(this, worldPosition));
-            }
-        }
-
-        @Override
-        public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-            if (slot == 0) {
-                return stack.getDescriptionId().equals(ModItems.SOUL_CONTAINER.get().getDescriptionId());
-            } else {
-                return super.isItemValid(slot, stack);
-            }
-        }
-    };
+    public final ItemStackHandler itemHandler;
 
     int timer = 0;
     boolean active = true;
@@ -73,6 +53,7 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider ,
     LazyOptional<IEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
     int spawnRange = 5;
+    int entityLimit = 10; // Set your desired entity limit here
 
     public FESpawnerTE() {
         super(ModTileEntities.FE_SPAWNER.get());
@@ -82,8 +63,25 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider ,
                 setChanged();
                 ModMessages.sendToClients(new EnergySyncS2CPacket(this.energy, getBlockPos()));
             }
+        };
+        this.itemHandler = new ItemStackHandler(1) {
+            @Override
+            protected void onContentsChanged(int slot) {
+                setChanged();
+                assert level != null;
+                if (!level.isClientSide()) {
+                    ModMessages.sendToClients(new ItemStackSyncS2CPacket(this, worldPosition));
+                }
+            }
 
-
+            @Override
+            public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+                if (slot == 0) {
+                    return stack.getDescriptionId().equals(ModItems.SOUL_CONTAINER.get().getDescriptionId());
+                } else {
+                    return super.isItemValid(slot, stack);
+                }
+            }
         };
     }
 
@@ -106,22 +104,32 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider ,
         if (!this.level.isClientSide() && active) {
             this.timer++;
             energyStorage.extractEnergy(100, false);
-            if (timer > 40) {
+            if (timer > 40 && getEntityCount() < entityLimit) {
                 timer = 0;
                 BlockPos pos = this.worldPosition;
                 Random r = new Random();
-                double x = pos.getX() + r.nextInt(spawnRange*2)-spawnRange;
+                double x = pos.getX() + r.nextInt(spawnRange * 2) - spawnRange;
                 double y = pos.getY() + 1;
-                double z = pos.getZ() + r.nextInt(spawnRange*2)-spawnRange;
+                double z = pos.getZ() + r.nextInt(spawnRange * 2) - spawnRange;
                 Entity entity = entityType.create(this.level);
                 assert entity != null;
                 entity.moveTo(x, y, z);
                 if (this.level.noCollision(entityType.getAABB(x, y, z))) {
                     this.level.addFreshEntity(entity);
                 }
-
             }
         }
+    }
+
+    private int getEntityCount() {
+        assert this.level != null;
+        int count = 0;
+        for (Entity entity : this.level.getEntities(null, entityType.getAABB(0, 0, 0))) {
+            if (entity.getType() == entityType) {
+                count++;
+            }
+        }
+        return count;
     }
 
     public void setHandler(ItemStackHandler itemStackHandler) {
@@ -170,7 +178,6 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider ,
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-
         if (cap == CapabilityEnergy.ENERGY) {
             return lazyEnergyHandler.cast();
         }
@@ -185,7 +192,7 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider ,
     public void drops() {
         for (int i = 0; i < itemHandler.getSlots(); i++) {
             assert this.level != null;
-            this.level.addFreshEntity(new ItemEntity(level, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(),itemHandler.getStackInSlot(i)));
+            this.level.addFreshEntity(new ItemEntity(level, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), itemHandler.getStackInSlot(i)));
         }
     }
 

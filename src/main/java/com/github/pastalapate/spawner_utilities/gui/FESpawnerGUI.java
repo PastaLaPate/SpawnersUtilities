@@ -25,6 +25,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Collections;
 import java.util.Objects;
 
 public class FESpawnerGUI extends Container {
@@ -207,6 +208,7 @@ public class FESpawnerGUI extends Container {
             // Check if the mouse is hovering over the progress bar
             int offsetX = (width - imageWidth) / 2;
             int offsetY = (height - imageHeight) / 2;
+            renderComponentTooltip(ms, Collections.singletonList(new StringTextComponent("FE Spawner")), offsetX, offsetY);
             if (isMouseAboveArea(mouseX, mouseY, x, y, offsetX, offsetY, progressBarWidth, progressBarHeight)) {
                 String tooltip = energyStored + "/" + maxEnergyStored + " FE";
                 renderTooltip(ms, new StringTextComponent(tooltip), mouseX - offsetX, mouseY - offsetY);
@@ -229,7 +231,6 @@ public class FESpawnerGUI extends Container {
         private boolean isMouseAboveArea(int pMouseX, int pMouseY, int x, int y, int offsetX, int offsetY, int width, int height) {
             return MouseUtils.isMouseOver(pMouseX, pMouseY, x + offsetX, y + offsetY, width, height);
         }
-
 
     }
 }

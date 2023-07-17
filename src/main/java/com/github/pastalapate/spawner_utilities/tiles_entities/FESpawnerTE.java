@@ -47,13 +47,13 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
 
     public final ItemStackHandler itemHandler;
 
-    int timer = 0;
-    boolean active = true;
-    EntityType<?> entityType = null;
-    LazyOptional<IEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
+    private int timer = 0;
+    private boolean active = true;
+    private EntityType<?> entityType = null;
+    private LazyOptional<IEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
-    int spawnRange = 5;
-    int entityLimit = 5;
+    private final int spawnRange = 5;
+    private final int entityLimit = 5;
     public int instance_id;
     public int entityCount;
 
@@ -79,7 +79,7 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
             @Override
             public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
                 if (slot == 0) {
-                    return stack.getDescriptionId().equals(ModItems.SOUL_CONTAINER.get().getDescriptionId());
+                    return stack.getItem() == ModItems.SOUL_CONTAINER.get();
                 } else {
                     return super.isItemValid(slot, stack);
                 }
@@ -97,10 +97,8 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
         assert this.level != null;
         ItemStack item = itemHandler.getStackInSlot(0);
         boolean empty = item.isEmpty();
-        if (empty || !item.getDescriptionId().equals(ModItems.SOUL_CONTAINER.get().getDescriptionId()) || item.getTag() == null) {
+        if (empty || item.getItem() != ModItems.SOUL_CONTAINER.get() || item.getTag() == null) {
             return;
-        } else {
-            item.getTag().getString("entity");
         }
         entityType = EntityType.byString(item.getTag().getString("entity")).orElse(null);
         active = energyStorage.getEnergyStored() >= 100 && entityType != null && entityCount < entityLimit;
@@ -115,12 +113,13 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
                 double y = pos.getY() + 1;
                 double z = pos.getZ() + r.nextInt(spawnRange * 2) - spawnRange;
                 Entity entity = entityType.create(this.level);
-                assert entity != null;
-                entity.moveTo(x, y, z);
-                if (this.level.noCollision(entityType.getAABB(x, y, z))) {
-                    this.level.addFreshEntity(entity);
-                    entity.getPersistentData().putInt("spawner_id", instance_id);
-                    entityCount += 1;
+                if (entity != null) {
+                    entity.moveTo(x, y, z);
+                    if (this.level.noCollision(entityType.getAABB(x, y, z))) {
+                        this.level.addFreshEntity(entity);
+                        entity.getPersistentData().putInt("spawner_id", instance_id);
+                        entityCount += 1;
+                    }
                 }
             }
         }
@@ -208,7 +207,9 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
     public static class Listener {
         @SubscribeEvent
         public void onLivingEntityDies(LivingDeathEvent event) {
-            if (event.getEntity().getPersistentData().getInt("spawner_id") == 0){return;}
+            if (event.getEntity().getPersistentData().getInt("spawner_id") == 0) {
+                return;
+            }
             SpawnerUtilities.LOGGER.info(event.getEntity().getPersistentData().toString());
             for (FESpawnerTE instance : FESpawnerTEManager.getAllInstances()) {
                 if (instance.instance_id == event.getEntity().getPersistentData().getInt("spawner_id")) {

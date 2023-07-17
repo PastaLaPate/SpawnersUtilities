@@ -1,6 +1,6 @@
 package com.github.pastalapate.spawner_utilities.networking;
 
-import com.github.pastalapate.spawner_utilities.Main;
+import com.github.pastalapate.spawner_utilities.SpawnerUtilities;
 import com.github.pastalapate.spawner_utilities.networking.packets.DamageSyncC2SPacket;
 import com.github.pastalapate.spawner_utilities.networking.packets.EnergySyncS2CPacket;
 import com.github.pastalapate.spawner_utilities.networking.packets.ItemStackSyncS2CPacket;
@@ -21,7 +21,7 @@ public class ModMessages {
 
     public static void register() {
         SimpleChannel net = NetworkRegistry.ChannelBuilder
-                .named(new ResourceLocation(Main.MOD_ID, "messages"))
+                .named(new ResourceLocation(SpawnerUtilities.MOD_ID, "messages"))
                 .networkProtocolVersion(() -> "1.0")
                 .clientAcceptedVersions(s -> true)
                 .serverAcceptedVersions(s -> true)

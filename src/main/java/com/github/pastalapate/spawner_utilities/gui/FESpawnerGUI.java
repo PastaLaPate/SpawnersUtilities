@@ -1,6 +1,6 @@
 package com.github.pastalapate.spawner_utilities.gui;
 
-import com.github.pastalapate.spawner_utilities.Main;
+import com.github.pastalapate.spawner_utilities.SpawnerUtilities;
 import com.github.pastalapate.spawner_utilities.gui.utils.MouseUtils;
 import com.github.pastalapate.spawner_utilities.init.ModContainerType;
 import com.github.pastalapate.spawner_utilities.tiles_entities.FESpawnerTE;
@@ -84,7 +84,7 @@ public class FESpawnerGUI extends Container {
             this.tileentity = container.tileEntity;
         }
 
-        private static final ResourceLocation texture = new ResourceLocation(Main.MOD_ID, "textures/screens/fespawner.png");
+        private static final ResourceLocation texture = new ResourceLocation(SpawnerUtilities.MOD_ID, "textures/screens/fespawner.png");
 
         @Override
         @ParametersAreNonnullByDefault

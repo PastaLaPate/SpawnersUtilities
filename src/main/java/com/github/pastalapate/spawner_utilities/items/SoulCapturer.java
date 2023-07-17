@@ -1,6 +1,5 @@
 package com.github.pastalapate.spawner_utilities.items;
 
-import com.github.pastalapate.spawner_utilities.Main;
 import com.github.pastalapate.spawner_utilities.init.ModGroup;
 import com.github.pastalapate.spawner_utilities.init.ModItems;
 import com.github.pastalapate.spawner_utilities.networking.ModMessages;
@@ -19,7 +18,6 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import org.apache.logging.log4j.Level;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
@@ -65,7 +63,6 @@ public class SoulCapturer extends Item {
             nbt.putString("entity", Objects.requireNonNull(hurted.getType().getRegistryName()).toString());
             itemWhoHurt.setTag(nbt);
             hurted.kill();
-            Main.LOGGER.printf(Level.DEBUG, "Damage : %s Max damage %s", itemWhoHurt.getDamageValue(), itemWhoHurt.getMaxDamage());
             ModMessages.sendToServer(new DamageSyncC2SPacket(1, itemWhoHurt));
         }
         return super.hurtEnemy(itemWhoHurt, hurted, author);

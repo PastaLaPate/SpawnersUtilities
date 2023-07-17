@@ -52,8 +52,8 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
     private EntityType<?> entityType = null;
     private LazyOptional<IEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
-    private final int spawnRange = 5;
-    private final int entityLimit = 5;
+    private int spawnRange = 5;
+    private int entityLimit = 5;
     public int instance_id;
     public int entityCount;
 
@@ -94,31 +94,31 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
 
     @Override
     public void tick() {
+        if (spawnRange == 0) spawnRange = 5;
         assert this.level != null;
         ItemStack item = itemHandler.getStackInSlot(0);
         boolean empty = item.isEmpty();
-        if (empty || item.getItem() != ModItems.SOUL_CONTAINER.get() || item.getTag() == null) {
-            return;
-        }
-        entityType = EntityType.byString(item.getTag().getString("entity")).orElse(null);
-        active = energyStorage.getEnergyStored() >= 100 && entityType != null && entityCount < entityLimit;
-        if (!this.level.isClientSide() && active) {
-            this.timer++;
-            energyStorage.extractEnergy(100, false);
-            if (timer > 40 && entityCount < entityLimit) {
-                timer = 0;
-                BlockPos pos = this.worldPosition;
-                Random r = new Random();
-                double x = pos.getX() + r.nextInt(spawnRange * 2) - spawnRange;
-                double y = pos.getY() + 1;
-                double z = pos.getZ() + r.nextInt(spawnRange * 2) - spawnRange;
-                Entity entity = entityType.create(this.level);
-                if (entity != null) {
-                    entity.moveTo(x, y, z);
-                    if (this.level.noCollision(entityType.getAABB(x, y, z))) {
-                        this.level.addFreshEntity(entity);
-                        entity.getPersistentData().putInt("spawner_id", instance_id);
-                        entityCount += 1;
+        if (!empty && item.getItem() == ModItems.SOUL_CONTAINER.get() && item.getTag() != null) {
+            entityType = EntityType.byString(item.getTag().getString("entity")).orElse(null);
+            active = energyStorage.getEnergyStored() >= 100 && entityType != null && entityCount < entityLimit;
+            if (!this.level.isClientSide() && active) {
+                this.timer++;
+                energyStorage.extractEnergy(100, false);
+                if (timer > 40 && entityCount < entityLimit) {
+                    timer = 0;
+                    BlockPos pos = this.worldPosition;
+                    Random r = new Random();
+                    double x = pos.getX() + r.nextInt(spawnRange * 2) - spawnRange;
+                    double y = pos.getY() + 1;
+                    double z = pos.getZ() + r.nextInt(spawnRange * 2) - spawnRange;
+                    Entity entity = entityType.create(this.level);
+                    if (entity != null) {
+                        entity.moveTo(x, y, z);
+                        if (this.level.noCollision(entityType.getAABB(x, y, z))) {
+                            this.level.addFreshEntity(entity);
+                            entity.getPersistentData().putInt("spawner_id", instance_id);
+                            entityCount += 1;
+                        }
                     }
                 }
             }
@@ -153,6 +153,8 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
         nbt.putString("fe_spawner.entity_type", entityType != null ? entityType.toString() : "");
         nbt.putInt("fe_spawner.entityCount", entityCount);
         nbt.putInt("fe_spawner.instance_id", instance_id); // Save the instance ID
+        nbt.putInt("fe_spawner.range", spawnRange);
+        nbt.putInt("fe_spawner.entityLimit", entityLimit);
         return super.save(nbt);
     }
 
@@ -163,7 +165,9 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
         this.energyStorage.setEnergy(nbt.getInt("fe_spawner.energy"));
         this.entityType = EntityType.byString(nbt.getString("fe_spawner.entity_type")).orElse(null);
         this.entityCount = nbt.getInt("fe_spawner.entityCount");
-        this.instance_id = nbt.getInt("fe_spawner.instance_id"); // Load the instance ID
+        this.instance_id = nbt.getInt("fe_spawner.instance_id");
+        this.spawnRange = nbt.getInt("fe_spawner.spawnRange") == 0 ? 5 : nbt.getInt("fe_spawner.spawnRange");
+        this.entityLimit = nbt.getInt("fe_spawner.entityLimit");
         super.load(blockState, nbt);
     }
 
@@ -210,7 +214,6 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
             if (event.getEntity().getPersistentData().getInt("spawner_id") == 0) {
                 return;
             }
-            SpawnerUtilities.LOGGER.info(event.getEntity().getPersistentData().toString());
             for (FESpawnerTE instance : FESpawnerTEManager.getAllInstances()) {
                 if (instance.instance_id == event.getEntity().getPersistentData().getInt("spawner_id")) {
                     instance.entityCount -= 1;

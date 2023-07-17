@@ -1,5 +1,6 @@
 package com.github.pastalapate.spawner_utilities.tiles_entities;
 
+import com.github.pastalapate.spawner_utilities.SpawnerUtilities;
 import com.github.pastalapate.spawner_utilities.energy.ModEnergyStorage;
 import com.github.pastalapate.spawner_utilities.gui.FESpawnerGUI;
 import com.github.pastalapate.spawner_utilities.init.ModItems;
@@ -39,24 +40,22 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class FESpawnerTE extends TileEntity implements INamedContainerProvider, ITickableTileEntity {
-    private int timer = 0;
-    private boolean active = false;
-    private EntityType<?> entityType = null;
-    private LazyOptional<IEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
+    public ModEnergyStorage energyStorage;
+
+    public final ItemStackHandler itemHandler;
+
+    int timer = 0;
+    boolean active = true;
+    EntityType<?> entityType = null;
+    LazyOptional<IEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
-    private int spawnRange = 5;
-    private int entityLimit = 5;
+    int spawnRange = 5;
+    int entityLimit = 5;
     public int instance_id;
     public int entityCount;
-    public ModEnergyStorage energyStorage;
-    public final ItemStackHandler itemHandler;
-    public static final List<FESpawnerTE> instances = new ArrayList<>();
-    public static int instancesID = 1;
 
     public FESpawnerTE() {
         super(ModTileEntities.FE_SPAWNER.get());
@@ -86,16 +85,12 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
                 }
             }
         };
-        instances.add(this);
-        this.instance_id = instancesID;
-        instancesID += 1;
+        FESpawnerTEManager.registerInstance(this);
     }
-    /*
-    *
-    * ITickableTileEntity
-    *
-    */
 
+    public void setEnergyLevel(int energy) {
+        this.energyStorage.setEnergy(energy);
+    }
 
     @Override
     public void tick() {
@@ -123,62 +118,54 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
                 assert entity != null;
                 entity.moveTo(x, y, z);
                 if (this.level.noCollision(entityType.getAABB(x, y, z))) {
-                    entity.getPersistentData().putInt("spawner_id", instance_id);
                     this.level.addFreshEntity(entity);
+                    entity.getPersistentData().putInt("spawner_id", instance_id);
                     entityCount += 1;
                 }
             }
         }
     }
 
-    /*
-     * ###################################################
-     * NBT Saver
-     * ###################################################
-     */
-
-    /*
-    * Save the block : inventory, energy, entity type, instance id, entity counter
-    */
-
-    @Override
-    @MethodsReturnNonnullByDefault
-    public CompoundNBT save(CompoundNBT nbt) {
-        nbt.put("fe_spawner.inventory", itemHandler.serializeNBT());
-        nbt.putInt("fe_spawner.energy", energyStorage.getEnergyStored());
-        nbt.putString("fe_spawner.entity_type", entityType != null ? entityType.toString() : "");
-        nbt.putInt("fe_spawner.id", instance_id);
-        nbt.putInt("fe_spawner.entity_counter", entityCount);
-        return super.save(nbt);
+    public void setHandler(ItemStackHandler itemStackHandler) {
+        for (int i = 0; i < itemStackHandler.getSlots(); i++) {
+            itemHandler.setStackInSlot(i, itemStackHandler.getStackInSlot(i));
+        }
     }
-
-    /*
-    * Load the block : inventory, energy, entityType, instance_id, entitycount
-    */
-
-    @Override
-    @ParametersAreNonnullByDefault
-    public void load(BlockState blockState, CompoundNBT nbt) {
-        this.itemHandler.deserializeNBT(nbt.getCompound("fe_spawner.inventory"));
-        this.energyStorage.setEnergy(nbt.getInt("fe_spawner.energy"));
-        this.entityType = EntityType.byString(nbt.getString("fe_spawner.entity_type")).orElse(null);
-        this.instance_id = nbt.getInt("fe_spawner.id");
-        if (this.instance_id > instancesID) instancesID +=1;
-        this.entityCount = nbt.getInt("fe_spawner.entity_counter");
-        super.load(blockState, nbt);
-    }
-
-    /*
-    * ###################################################
-    * CapabilityProvider
-    * ###################################################
-    */
 
     @Override
     public void onLoad() {
         super.onLoad();
         lazyEnergyHandler = LazyOptional.of(() -> energyStorage);
         lazyItemHandler = LazyOptional.of(() -> itemHandler);
+    }
+
+    @Override
+    protected void invalidateCaps() {
+        super.invalidateCaps();
+        lazyEnergyHandler.invalidate();
+        lazyItemHandler.invalidate();
+    }
+
+    @Override
+    @MethodsReturnNonnullByDefault
+    public CompoundNBT save(CompoundNBT nbt) {
+        nbt.put("inventory", itemHandler.serializeNBT());
+        nbt.putInt("fe_spawner.energy", energyStorage.getEnergyStored());
+        nbt.putString("fe_spawner.entity_type", entityType != null ? entityType.toString() : "");
+        nbt.putInt("fe_spawner.entityCount", entityCount);
+        nbt.putInt("fe_spawner.instance_id", instance_id); // Save the instance ID
+        return super.save(nbt);
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    public void load(BlockState blockState, CompoundNBT nbt) {
+        this.itemHandler.deserializeNBT(nbt.getCompound("inventory"));
+        this.energyStorage.setEnergy(nbt.getInt("fe_spawner.energy"));
+        this.entityType = EntityType.byString(nbt.getString("fe_spawner.entity_type")).orElse(null);
+        this.entityCount = nbt.getInt("fe_spawner.entityCount");
+        this.instance_id = nbt.getInt("fe_spawner.instance_id"); // Load the instance ID
+        super.load(blockState, nbt);
     }
 
     @Nonnull
@@ -195,18 +182,12 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
         return super.getCapability(cap, side);
     }
 
-    @Override
-    protected void invalidateCaps() {
-        super.invalidateCaps();
-        lazyEnergyHandler.invalidate();
-        lazyItemHandler.invalidate();
+    public void drops() {
+        for (int i = 0; i < itemHandler.getSlots(); i++) {
+            assert this.level != null;
+            this.level.addFreshEntity(new ItemEntity(level, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), itemHandler.getStackInSlot(i)));
+        }
     }
-
-    /*
-    * ###################################################
-    * INamedContainerProvider
-    * ###################################################
-    */
 
     @Override
     @MethodsReturnNonnullByDefault
@@ -224,37 +205,14 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
         return new FESpawnerGUI(p_createMenu_1_, p_createMenu_2_, this, extraData);
     }
 
-    /*
-    * ###################################################
-    * util fonctions
-    * ###################################################
-    */
-
-    public void drops() {
-        for (int i = 0; i < itemHandler.getSlots(); i++) {
-            assert this.level != null;
-            this.level.addFreshEntity(new ItemEntity(level, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), itemHandler.getStackInSlot(i)));
-        }
-    }
-
-    public void setHandler(ItemStackHandler itemStackHandler) {
-        for (int i = 0; i < itemStackHandler.getSlots(); i++) {
-            itemHandler.setStackInSlot(i, itemStackHandler.getStackInSlot(i));
-        }
-    }
-
-    public void setEnergyLevel(int energy) {
-        this.energyStorage.setEnergy(energy);
-    }
-
     public static class Listener {
         @SubscribeEvent
         public void onLivingEntityDies(LivingDeathEvent event) {
             if (event.getEntity().getPersistentData().getInt("spawner_id") == 0){return;}
-            for (FESpawnerTE instance : instances) {
+            SpawnerUtilities.LOGGER.info(event.getEntity().getPersistentData().toString());
+            for (FESpawnerTE instance : FESpawnerTEManager.getAllInstances()) {
                 if (instance.instance_id == event.getEntity().getPersistentData().getInt("spawner_id")) {
                     instance.entityCount -= 1;
-                    break;
                 }
             }
         }

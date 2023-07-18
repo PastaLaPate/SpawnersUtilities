@@ -1,6 +1,7 @@
 package com.github.pastalapate.spawner_utilities.tiles_entities;
 
 import com.github.pastalapate.spawner_utilities.SpawnerUtilities;
+import com.github.pastalapate.spawner_utilities.blocks.FESpawner;
 import com.github.pastalapate.spawner_utilities.energy.ModEnergyStorage;
 import com.github.pastalapate.spawner_utilities.gui.FESpawnerGUI;
 import com.github.pastalapate.spawner_utilities.init.ModItems;
@@ -43,6 +44,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Random;
 
 public class FESpawnerTE extends TileEntity implements INamedContainerProvider, ITickableTileEntity {
+    public final int upgradeLimit;
     public ModEnergyStorage energyStorage;
 
     public final ItemStackHandler itemHandler;
@@ -52,13 +54,18 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
     private EntityType<?> entityType = null;
     private LazyOptional<IEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
-    private int spawnRange = 5;
-    private int entityLimit = 5;
+    public int spawnRange;
+    public int entityLimit;
     public int instance_id;
     public int entityCount;
+    public int spawnTime;
 
-    public FESpawnerTE() {
+    public FESpawnerTE(FESpawner.Builder builder) {
         super(ModTileEntities.FE_SPAWNER.get());
+        spawnTime = builder.spawnTime;
+        spawnRange = builder.range;
+        entityLimit = builder.maxEntities;
+        upgradeLimit = builder.upgradeLimit;
         this.energyStorage = new ModEnergyStorage(100_000, 300) {
             @Override
             public void onEnergyChanged() {
@@ -104,7 +111,7 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
             if (!this.level.isClientSide() && active) {
                 this.timer++;
                 energyStorage.extractEnergy(100, false);
-                if (timer > 40 && entityCount < entityLimit) {
+                if (timer > spawnTime && entityCount < entityLimit) {
                     timer = 0;
                     BlockPos pos = this.worldPosition;
                     Random r = new Random();

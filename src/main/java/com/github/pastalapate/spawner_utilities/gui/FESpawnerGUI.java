@@ -9,6 +9,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -23,9 +24,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.SlotItemHandler;
+import org.apache.logging.log4j.Level;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 public class FESpawnerGUI extends Container {
@@ -122,13 +125,17 @@ public class FESpawnerGUI extends Container {
     @OnlyIn(Dist.CLIENT)
     public static class FESpawnerScreen extends ContainerScreen<FESpawnerGUI> {
         private final int xSize, ySize;
+        private int offsetX;
+        private int offsetY;
         private final FESpawnerTE tileentity;
+        private final List<Slot> slots;
 
         public FESpawnerScreen(FESpawnerGUI container, PlayerInventory inventory, ITextComponent text) {
-            super(container, inventory, text);
+            super(container, inventory, new StringTextComponent("FE Spawner GUI"));
             this.xSize = 176;
             this.ySize = 166;
             this.tileentity = container.tileEntity;
+            this.slots = container.slots;
         }
 
         private static final ResourceLocation texture = new ResourceLocation(SpawnerUtilities.MOD_ID, "textures/screens/fespawner.png");
@@ -136,6 +143,8 @@ public class FESpawnerGUI extends Container {
         @Override
         @ParametersAreNonnullByDefault
         public void render(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
+            offsetX = (width - imageWidth) / 2;
+            offsetY = (height - imageHeight) / 2;
             this.renderBackground(ms);
             super.render(ms, mouseX, mouseY, partialTicks);
             this.renderTooltip(ms, mouseX, mouseY);
@@ -149,16 +158,22 @@ public class FESpawnerGUI extends Container {
             RenderSystem.defaultBlendFunc();
             assert this.minecraft != null;
             this.minecraft.getTextureManager().bind(texture);
-            int offsetX = (width - imageWidth) / 2;
-            int offsetY = (height - imageHeight) / 2;
             int k = (this.width - this.xSize) / 2;
             int l = (this.height - this.ySize) / 2;
             blit(ms, k, l, 0, 0, this.xSize, this.ySize, this.xSize, this.ySize);
-            int slotX = 126 + offsetX;
-            int slotY = 40 + offsetY;
-            int slotSize = 16;
-            fill(ms, slotX, slotY, slotX + slotSize, slotY + slotSize, 0xFF9F9F9F);
+            drawSlots(ms, slots);
             RenderSystem.disableBlend();
+        }
+
+        public void drawSlots(MatrixStack ms, List<Slot> slots) {
+            for (Slot slot : slots) {
+                if (slot instanceof SlotItemHandler) {
+                    int slotX = slot.x + offsetX;
+                    int slotY = slot.y + offsetY;
+                    int slotSize = 16;
+                    fill(ms, slotX, slotY, slotX + slotSize, slotY + slotSize, 0xFF9F9F9F);
+                }
+            }
         }
 
         /* FILL
@@ -189,6 +204,7 @@ public class FESpawnerGUI extends Container {
         @Override
         @ParametersAreNonnullByDefault
         protected void renderLabels(MatrixStack ms, int mouseX, int mouseY) {
+            this.font.draw(ms, this.title, (float)this.titleLabelX, (float)this.titleLabelY, 4210752);
             int energyStored = tileentity.energyStorage.getEnergyStored();
             int maxEnergyStored = tileentity.energyStorage.getMaxEnergyStored();
             int progressBarWidth = 10; // Width of the progress bar
@@ -206,14 +222,10 @@ public class FESpawnerGUI extends Container {
             int filledY = y + progressBarHeight - fillPercentage;
             fillGradient(ms, x, filledY, x + progressBarWidth, y + progressBarHeight, 0xFFFF0000, 0xFF7F0505);
             // Check if the mouse is hovering over the progress bar
-            int offsetX = (width - imageWidth) / 2;
-            int offsetY = (height - imageHeight) / 2;
             if (isMouseAboveArea(mouseX, mouseY, x, y, offsetX, offsetY, progressBarWidth, progressBarHeight)) {
                 String tooltip = energyStored + "/" + maxEnergyStored + " FE";
                 renderTooltip(ms, new StringTextComponent(tooltip), mouseX - offsetX, mouseY - offsetY);
             }
-            // TODO : Fixs screen title
-            renderComponentTooltip(ms, Collections.singletonList(new StringTextComponent("FE Spawner")), offsetX, offsetY);
         }
 
         @Override

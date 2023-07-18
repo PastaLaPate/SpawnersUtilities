@@ -22,8 +22,11 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 public class FESpawner extends Block  {
 
-    public FESpawner() {
+    private final Builder builder;
+
+    private FESpawner(Builder builder) {
         super(AbstractBlock.Properties.of(Material.GLASS).noOcclusion().strength(3f, 15f).harvestTool(ToolType.PICKAXE).harvestLevel(2).requiresCorrectToolForDrops().isViewBlocking((a,b,c) -> false));
+        this.builder = builder;
     }
 
     @Override
@@ -57,12 +60,56 @@ public class FESpawner extends Block  {
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return ModTileEntities.FE_SPAWNER.get().create();
+        return new FESpawnerTE(builder);
     }
 
     @Override
     @MethodsReturnNonnullByDefault
     public BlockRenderType getRenderShape(BlockState p_149645_1_) {
         return BlockRenderType.MODEL;
+    }
+
+    public static class Builder {
+
+        public static final Builder tier1 = new Builder().setRange(4).setMaxEntities(5).setMaxUpgrade(0).setSpawnTime(40);
+
+        public int range = 4;
+        public int maxEntities = 5;
+        public int upgradeLimit = 0;
+        public int spawnTime = 40;
+
+        public Builder() {
+
+        }
+
+        public Builder(final int range, final int maxEntities, final int upgradeLimit) {
+            this.range = range;
+            this.maxEntities = maxEntities;
+            this.upgradeLimit = upgradeLimit;
+        }
+
+        public Builder setRange(int range) {
+            this.range = range;
+            return this;
+        }
+
+        public Builder setMaxEntities(int maxEntities) {
+            this.maxEntities = maxEntities;
+            return this;
+        }
+
+        public Builder setMaxUpgrade(int mU) {
+            this.upgradeLimit = mU;
+            return this;
+        }
+
+        public Builder setSpawnTime(int ST) {
+            this.spawnTime = ST;
+            return this;
+        }
+
+        public FESpawner build() {
+            return new FESpawner(this);
+        }
     }
 }

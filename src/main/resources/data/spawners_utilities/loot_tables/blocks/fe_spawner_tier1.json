@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "spawners_utilities:fe_spawner"
+          "name": "spawners_utilities:fe_spawner_tier1"
         }
       ],
       "conditions": [

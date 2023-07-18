@@ -72,15 +72,14 @@ public class FESpawner extends Block  {
     public static class Builder {
 
         public static final Builder tier1 = new Builder().setRange(4).setMaxEntities(5).setMaxUpgrade(0).setSpawnTime(40);
+        public static final Builder tier2 = new Builder().setRange(3).setMaxEntities(10).setMaxUpgrade(2).setSpawnTime(20);
 
         public int range = 4;
         public int maxEntities = 5;
         public int upgradeLimit = 0;
         public int spawnTime = 40;
 
-        public Builder() {
-
-        }
+        public Builder() {}
 
         public Builder(final int range, final int maxEntities, final int upgradeLimit) {
             this.range = range;

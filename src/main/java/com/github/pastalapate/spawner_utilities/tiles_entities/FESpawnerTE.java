@@ -37,6 +37,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -73,7 +74,8 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
                 ModMessages.sendToClients(new EnergySyncS2CPacket(this.energy, getBlockPos()));
             }
         };
-        this.itemHandler = new ItemStackHandler(1) {
+        SpawnerUtilities.LOGGER.printf(Level.DEBUG, "ul %s tS %s", upgradeLimit, upgradeLimit+1);
+        this.itemHandler = new ItemStackHandler(1+upgradeLimit) {
             @Override
             protected void onContentsChanged(int slot) {
                 setChanged();

@@ -60,7 +60,21 @@ public class FESpawnerGUI extends Container {
         for (si = 0; si < 9; ++si)
             this.addSlot(new Slot(inv, si, 8 + si * 18, 142));
 
+        // Soul
         this.addSlot(new SlotItemHandler(this.tileEntity.itemHandler, 0, 126, 40));
+
+        // Additional slots
+        int sX = 50;
+        int sY = 25;
+        int upgradeSlotNumber = tileEntity.upgradeLimit;
+        for (int i = 0; i < upgradeSlotNumber; i++) {
+            this.addSlot(new SlotItemHandler(this.tileEntity.itemHandler, i + 1, sX, sY));
+            sX += 18;
+            if ((i + 1) % 3 == 0) {
+                sX = 40;
+                sY += 18;
+            }
+        }
     }
 
     private static final int HOTBAR_SLOT_COUNT = 9;
@@ -70,12 +84,12 @@ public class FESpawnerGUI extends Container {
     private static final int VANILLA_SLOT_COUNT = HOTBAR_SLOT_COUNT + PLAYER_INVENTORY_SLOT_COUNT;
     private static final int VANILLA_FIRST_SLOT_INDEX = 0;
     private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
-    private static final int TE_INVENTORY_SLOT_COUNT = 1;
 
     @Override
     @MethodsReturnNonnullByDefault
     @ParametersAreNonnullByDefault
     public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+        final int TE_INVENTORY_SLOT_COUNT = 1 + tileEntity.upgradeLimit;
         Slot sourceSlot = slots.get(index);
         if (sourceSlot == null || !sourceSlot.hasItem()) return ItemStack.EMPTY;  //EMPTY_ITEM
         ItemStack sourceStack = sourceSlot.getItem();
@@ -127,14 +141,14 @@ public class FESpawnerGUI extends Container {
         private final int xSize, ySize;
         private int offsetX;
         private int offsetY;
-        private final FESpawnerTE tileentity;
+        private final FESpawnerTE tileEntity;
         private final List<Slot> slots;
 
         public FESpawnerScreen(FESpawnerGUI container, PlayerInventory inventory) {
             super(container, inventory, new StringTextComponent("FE Spawner GUI"));
             this.xSize = 176;
             this.ySize = 166;
-            this.tileentity = container.tileEntity;
+            this.tileEntity = container.tileEntity;
             this.slots = container.slots;
         }
 
@@ -205,8 +219,8 @@ public class FESpawnerGUI extends Container {
         @ParametersAreNonnullByDefault
         protected void renderLabels(MatrixStack ms, int mouseX, int mouseY) {
             this.font.draw(ms, this.title, (float)this.titleLabelX, (float)this.titleLabelY, 4210752);
-            int energyStored = tileentity.energyStorage.getEnergyStored();
-            int maxEnergyStored = tileentity.energyStorage.getMaxEnergyStored();
+            int energyStored = tileEntity.energyStorage.getEnergyStored();
+            int maxEnergyStored = tileEntity.energyStorage.getMaxEnergyStored();
             int progressBarWidth = 10; // Width of the progress bar
             int progressBarHeight = 60; // Height of the progress bar
 

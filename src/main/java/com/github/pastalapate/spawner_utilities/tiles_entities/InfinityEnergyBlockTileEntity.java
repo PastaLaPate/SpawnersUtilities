@@ -16,7 +16,7 @@ public class InfinityEnergyBlockTileEntity extends TileEntity implements ITickab
     ModEnergyStorage storage = new ModEnergyStorage(Integer.MAX_VALUE, Integer.MAX_VALUE){
         @Override
         public void onEnergyChanged() {
-
+            setChanged();
         }
     };
     LazyOptional<IEnergyStorage> energyHandler = LazyOptional.empty();

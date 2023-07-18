@@ -11,6 +11,8 @@ import net.minecraft.block.Block;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
@@ -54,6 +56,6 @@ public class SpawnerUtilities
         for (RegistryObject<Block> transparentBlock : ModBlocks.TRANSPARENT_BLOCKS) {
             RenderTypeLookup.setRenderLayer(transparentBlock.get(), RenderType.translucent());
         }
-        ScreenManager.register(ModContainerType.FESpawnerGUI.get(), FESpawnerGUI.FESpawnerScreen::new);
+        ScreenManager.register(ModContainerType.FESpawnerGUI.get(), (FESpawnerGUI container, PlayerInventory inventory, ITextComponent text) -> new FESpawnerGUI.FESpawnerScreen(container, inventory));
     }
 }

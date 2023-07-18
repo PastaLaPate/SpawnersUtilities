@@ -130,7 +130,7 @@ public class FESpawnerGUI extends Container {
         private final FESpawnerTE tileentity;
         private final List<Slot> slots;
 
-        public FESpawnerScreen(FESpawnerGUI container, PlayerInventory inventory, ITextComponent text) {
+        public FESpawnerScreen(FESpawnerGUI container, PlayerInventory inventory) {
             super(container, inventory, new StringTextComponent("FE Spawner GUI"));
             this.xSize = 176;
             this.ySize = 166;

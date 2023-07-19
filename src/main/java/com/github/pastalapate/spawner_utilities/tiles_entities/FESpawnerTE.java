@@ -63,7 +63,7 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
     public int energyCons;
 
     public FESpawnerTE(FESpawner.Builder builder) {
-        super(builder.tileEntity);
+        super(builder.tileEntity.get());
         spawnTime = builder.spawnTime;
         spawnRange = builder.range;
         entityLimit = builder.maxEntities;

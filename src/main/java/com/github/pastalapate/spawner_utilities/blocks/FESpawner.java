@@ -1,5 +1,6 @@
 package com.github.pastalapate.spawner_utilities.blocks;
 
+import com.github.pastalapate.spawner_utilities.init.ModBlocks;
 import com.github.pastalapate.spawner_utilities.init.ModTileEntities;
 import com.github.pastalapate.spawner_utilities.tiles_entities.FESpawnerTE;
 import mcp.MethodsReturnNonnullByDefault;
@@ -8,6 +9,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -15,14 +17,23 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FESpawner extends Block  {
 
     private final Builder builder;
+    public static final List<RegistryObject<Block>> tiers = new ArrayList<>();
+
+    static {
+        tiers.add(ModBlocks.FE_SPAWNER);
+        tiers.add(ModBlocks.FE_SPAWNER_TIER2);
+    }
 
     private FESpawner(Builder builder) {
         super(AbstractBlock.Properties.of(Material.GLASS).noOcclusion().strength(3f, 15f).harvestTool(ToolType.PICKAXE).harvestLevel(2).requiresCorrectToolForDrops().isViewBlocking((a,b,c) -> false));
@@ -69,26 +80,49 @@ public class FESpawner extends Block  {
         return BlockRenderType.MODEL;
     }
 
+    public static boolean isB(Block block) {
+        for (RegistryObject<Block> tier : tiers) {
+            if (block.is(tier.get())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static class Builder {
 
-        public static final Builder tier1 = new Builder().setRange(4).setMaxEntities(5).setMaxUpgrade(0).setSpawnTime(40);
-        public static final Builder tier2 = new Builder().setRange(3).setMaxEntities(10).setMaxUpgrade(2).setSpawnTime(20);
+        public static final Builder tier1 = new Builder().setEnergyCons(100).setRange(4).setMaxEntities(5).setMaxUpgrade(0).setSpawnTime(40).setTileEntity(ModTileEntities.FE_SPAWNER.get());
+        public static final Builder tier2 = new Builder().setEnergyCons(200).setRange(3).setMaxEntities(10).setMaxUpgrade(2).setSpawnTime(20).setTileEntity(ModTileEntities.FE_SPAWNER_TIER2.get());
 
         public int range = 4;
         public int maxEntities = 5;
         public int upgradeLimit = 0;
         public int spawnTime = 40;
+        public TileEntityType<FESpawnerTE> tileEntity;
+        public int energyCons;
 
         public Builder() {}
 
-        public Builder(final int range, final int maxEntities, final int upgradeLimit) {
+        public Builder(final int range, final int maxEntities, final int upgradeLimit, final TileEntityType<FESpawnerTE> tileEntity, final int energyCons) {
             this.range = range;
             this.maxEntities = maxEntities;
             this.upgradeLimit = upgradeLimit;
+            this.tileEntity = tileEntity;
+            this.energyCons = energyCons;
+        }
+
+        public Builder setEnergyCons(int energyCons) {
+            this.energyCons = energyCons;
+            return this;
         }
 
         public Builder setRange(int range) {
             this.range = range;
+            return this;
+        }
+
+        public Builder setTileEntity(TileEntityType<FESpawnerTE> tileEntity) {
+            this.tileEntity = tileEntity;
             return this;
         }
 

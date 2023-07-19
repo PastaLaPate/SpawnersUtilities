@@ -60,13 +60,15 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
     public int instance_id;
     public int entityCount;
     public int spawnTime;
+    public int energyCons;
 
     public FESpawnerTE(FESpawner.Builder builder) {
-        super(ModTileEntities.FE_SPAWNER.get());
+        super(builder.tileEntity);
         spawnTime = builder.spawnTime;
         spawnRange = builder.range;
         entityLimit = builder.maxEntities;
         upgradeLimit = builder.upgradeLimit;
+        energyCons = builder.energyCons;
         this.energyStorage = new ModEnergyStorage(100_000, 300) {
             @Override
             public void onEnergyChanged() {
@@ -112,7 +114,7 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
             active = energyStorage.getEnergyStored() >= 100 && entityType != null && entityCount < entityLimit;
             if (!this.level.isClientSide() && active) {
                 this.timer++;
-                energyStorage.extractEnergy(100, false);
+                energyStorage.extractEnergy(energyCons, false);
                 if (timer > spawnTime && entityCount < entityLimit) {
                     timer = 0;
                     BlockPos pos = this.worldPosition;

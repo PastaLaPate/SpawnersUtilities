@@ -22,6 +22,7 @@ public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, SpawnerUtilities.MOD_ID);
 
     public static final RegistryObject<Block> FE_SPAWNER = createBlock("fe_spawner_tier1", FESpawner.Builder.tier1::build, ModGroup.instance);
+    public static final RegistryObject<Block> FE_SPAWNER_TIER2 = createBlock("fe_spawner_tier2", FESpawner.Builder.tier2::build, ModGroup.instance);
     public static final RegistryObject<Block> INFINITY_ENERGY_BLOCK = createBlock("infinity_energy_block", InfinityEnergyBlock::new, ModGroup.instance);
     public static final RegistryObject<Block> SPAWNER_BASE = createBlock("spawner_base", SpawnerBase::new, ModGroup.instance);
     public static final List<RegistryObject<Block>> TRANSPARENT_BLOCKS = new ArrayList<>();
@@ -29,6 +30,7 @@ public class ModBlocks {
     static {
         TRANSPARENT_BLOCKS.add(SPAWNER_BASE);
         TRANSPARENT_BLOCKS.add(FE_SPAWNER);
+        TRANSPARENT_BLOCKS.add(FE_SPAWNER_TIER2);
     }
 
     public static RegistryObject<Block> createBlock(String name, Supplier<? extends Block> supplier, ItemGroup group) {

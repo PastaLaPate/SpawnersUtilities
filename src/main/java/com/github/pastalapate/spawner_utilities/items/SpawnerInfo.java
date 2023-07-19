@@ -1,5 +1,6 @@
 package com.github.pastalapate.spawner_utilities.items;
 
+import com.github.pastalapate.spawner_utilities.blocks.FESpawner;
 import com.github.pastalapate.spawner_utilities.init.ModBlocks;
 import com.github.pastalapate.spawner_utilities.init.ModGroup;
 import mcp.MethodsReturnNonnullByDefault;
@@ -37,7 +38,7 @@ public class SpawnerInfo extends Item {
             CompoundNBT SpawnData = (CompoundNBT) nbt.get("SpawnData");
             assert SpawnData != null;
             player.displayClientMessage(new StringTextComponent("NBT Data : " + SpawnData.getString("id")), false);
-        } else if (blockState.getBlock().is(ModBlocks.FE_SPAWNER.get())) {
+        } else if (FESpawner.isB(blockState.getBlock())) {
             TileEntity tileEntity = world.getBlockEntity(lookPos);
             assert tileEntity != null;
             final CompoundNBT nbt = tileEntity.save(new CompoundNBT());

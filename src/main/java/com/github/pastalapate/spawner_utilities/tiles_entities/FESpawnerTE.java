@@ -93,7 +93,7 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
             public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
                 if (slot == 0) {
                     return stack.getItem() == ModItems.SOUL_CONTAINER.get();
-                } else if (slot < upgradeLimit) {
+                } else if (slot <= upgradeLimit) {
                     return stack.getItem() instanceof AbstractUpgrade;
                 } else {
                     return super.isItemValid(slot, stack);

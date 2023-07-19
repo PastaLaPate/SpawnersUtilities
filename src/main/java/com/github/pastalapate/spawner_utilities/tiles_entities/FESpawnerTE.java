@@ -6,6 +6,7 @@ import com.github.pastalapate.spawner_utilities.energy.ModEnergyStorage;
 import com.github.pastalapate.spawner_utilities.gui.FESpawnerGUI;
 import com.github.pastalapate.spawner_utilities.init.ModItems;
 import com.github.pastalapate.spawner_utilities.items.AbstractUpgrade;
+import com.github.pastalapate.spawner_utilities.items.SpeedUpgrade;
 import com.github.pastalapate.spawner_utilities.networking.ModMessages;
 import com.github.pastalapate.spawner_utilities.networking.packets.EnergySyncS2CPacket;
 import com.github.pastalapate.spawner_utilities.networking.packets.ItemStackSyncS2CPacket;
@@ -46,6 +47,7 @@ import java.util.Random;
 
 public class FESpawnerTE extends TileEntity implements INamedContainerProvider, ITickableTileEntity {
     public final int upgradeLimit;
+    private final FESpawner.Builder builder;
     public ModEnergyStorage energyStorage;
 
     public final ItemStackHandler itemHandler;
@@ -65,6 +67,7 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
 
     public FESpawnerTE(FESpawner.Builder builder) {
         super(builder.tileEntity.get());
+        this.builder = builder;
         spawnTime = builder.spawnTime;
         spawnRange = builder.range;
         entityLimit = builder.maxEntities;
@@ -109,6 +112,7 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
 
     @Override
     public void tick() {
+        updateUpgrades();
         if (spawnRange == 0) spawnRange = 5;
         assert this.level != null;
         ItemStack item = itemHandler.getStackInSlot(0);
@@ -135,6 +139,18 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
                             entityCount += 1;
                         }
                     }
+                }
+            }
+        }
+    }
+
+    public void updateUpgrades() {
+        for (int i = 0; i < itemHandler.getSlots(); i++) {
+            ItemStack slot = itemHandler.getStackInSlot(i);
+            if (!slot.isEmpty()) {
+                if (slot.getItem() == ModItems.SPEED_UPGRADE.get()) {
+                    SpeedUpgrade upgrade = (SpeedUpgrade) slot.getItem();
+                    spawnTime = (int) (builder.spawnTime - (builder.spawnTime * upgrade.getSupTime()));
                 }
             }
         }

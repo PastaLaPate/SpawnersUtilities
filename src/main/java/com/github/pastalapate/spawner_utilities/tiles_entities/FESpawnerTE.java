@@ -39,6 +39,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.util.Supplier;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -150,7 +151,9 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
             if (!slot.isEmpty()) {
                 if (slot.getItem() == ModItems.SPEED_UPGRADE.get()) {
                     SpeedUpgrade upgrade = (SpeedUpgrade) slot.getItem();
-                    spawnTime = (int) (builder.spawnTime - (builder.spawnTime * upgrade.getSupTime()));
+                    spawnTime = builder.spawnTime;
+                    spawnTime -= builder.spawnTime * upgrade.getSupTime();
+                    SpawnerUtilities.LOGGER.debug("Spawntime " + spawnTime);
                 }
             }
         }

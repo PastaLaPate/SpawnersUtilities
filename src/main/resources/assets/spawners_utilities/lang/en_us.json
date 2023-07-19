@@ -3,6 +3,7 @@
   "item.spawners_utilities.soul_capturer": "Soul Capturer",
   "item.spawners_utilities.soul_container": "Soul Container",
   "item.spawners_utilities.speed_upgrade":  "Speed Upgrade",
+  "item.spawners_utilities.entity_upgrade":  "Entity Upgrade",
   "block.spawners_utilities.fe_spawner_tier1": "FE Spawner Tier 1",
   "block.spawners_utilities.fe_spawner_tier2": "FE Spawner Tier 2",
   "block.spawners_utilities.spawner_base": "Spawner Base"

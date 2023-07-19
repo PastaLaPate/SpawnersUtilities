@@ -6,6 +6,7 @@ import com.github.pastalapate.spawner_utilities.energy.ModEnergyStorage;
 import com.github.pastalapate.spawner_utilities.gui.FESpawnerGUI;
 import com.github.pastalapate.spawner_utilities.init.ModItems;
 import com.github.pastalapate.spawner_utilities.items.AbstractUpgrade;
+import com.github.pastalapate.spawner_utilities.items.EntityUpgrade;
 import com.github.pastalapate.spawner_utilities.items.SpeedUpgrade;
 import com.github.pastalapate.spawner_utilities.networking.ModMessages;
 import com.github.pastalapate.spawner_utilities.networking.packets.EnergySyncS2CPacket;
@@ -146,14 +147,17 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
     }
 
     public void updateUpgrades() {
+        spawnTime = builder.spawnTime;
+        entityLimit = builder.maxEntities;
         for (int i = 0; i < itemHandler.getSlots(); i++) {
             ItemStack slot = itemHandler.getStackInSlot(i);
             if (!slot.isEmpty()) {
                 if (slot.getItem() == ModItems.SPEED_UPGRADE.get()) {
                     SpeedUpgrade upgrade = (SpeedUpgrade) slot.getItem();
-                    spawnTime = builder.spawnTime;
                     spawnTime -= builder.spawnTime * upgrade.getSupTime();
-                    SpawnerUtilities.LOGGER.debug("Spawntime " + spawnTime);
+                } else if (slot.getItem() == ModItems.ENTITY_UPGRADE.get()) {
+                    EntityUpgrade upgrade = (EntityUpgrade) slot.getItem();
+                    entityLimit += upgrade.getSupEntity();
                 }
             }
         }

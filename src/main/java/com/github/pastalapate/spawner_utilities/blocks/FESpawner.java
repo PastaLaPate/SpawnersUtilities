@@ -82,8 +82,8 @@ public class FESpawner extends Block  {
 
     public static class Builder {
 
-        public static final Builder tier1 = new Builder("Tier 1").setEnergyCons(100).setRange(4).setMaxEntities(5).setMaxUpgrade(0).setSpawnTime(40).setTileEntity(ModTileEntities.FE_SPAWNER);
-        public static final Builder tier2 = new Builder("Tier 2").setEnergyCons(200).setRange(3).setMaxEntities(10).setMaxUpgrade(2).setSpawnTime(20).setTileEntity(ModTileEntities.FE_SPAWNER_TIER2);
+        public static final Builder tier1 = new Builder("Tier 1").setEnergyCons(100).setRange(4).setMaxEntities(4).setMaxUpgrade(0).setSpawnTime(60).setTileEntity(ModTileEntities.FE_SPAWNER);
+        public static final Builder tier2 = new Builder("Tier 2").setEnergyCons(200).setRange(3).setMaxEntities(6).setMaxUpgrade(2).setSpawnTime(50).setTileEntity(ModTileEntities.FE_SPAWNER_TIER2);
 
         public int range = 4;
         public int maxEntities = 5;

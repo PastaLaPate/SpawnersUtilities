@@ -61,6 +61,7 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
     public int entityCount;
     public int spawnTime;
     public int energyCons;
+    private final String tierName;
 
     public FESpawnerTE(FESpawner.Builder builder) {
         super(builder.tileEntity.get());
@@ -69,6 +70,7 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
         entityLimit = builder.maxEntities;
         upgradeLimit = builder.upgradeLimit;
         energyCons = builder.energyCons;
+        tierName = builder.name;
         this.energyStorage = new ModEnergyStorage(100_000, 300) {
             @Override
             public void onEnergyChanged() {
@@ -206,7 +208,7 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
     @Override
     @MethodsReturnNonnullByDefault
     public ITextComponent getDisplayName() {
-        return new StringTextComponent("FE Spawner");
+        return new StringTextComponent("FE Spawner " + this.tierName);
     }
 
     @Nullable

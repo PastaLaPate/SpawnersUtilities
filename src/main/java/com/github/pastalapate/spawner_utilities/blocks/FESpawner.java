@@ -91,8 +91,8 @@ public class FESpawner extends Block  {
 
     public static class Builder {
 
-        public static final Builder tier1 = new Builder().setEnergyCons(100).setRange(4).setMaxEntities(5).setMaxUpgrade(0).setSpawnTime(40).setTileEntity(ModTileEntities.FE_SPAWNER);
-        public static final Builder tier2 = new Builder().setEnergyCons(200).setRange(3).setMaxEntities(10).setMaxUpgrade(2).setSpawnTime(20).setTileEntity(ModTileEntities.FE_SPAWNER_TIER2);
+        public static final Builder tier1 = new Builder("Tier 1").setEnergyCons(100).setRange(4).setMaxEntities(5).setMaxUpgrade(0).setSpawnTime(40).setTileEntity(ModTileEntities.FE_SPAWNER);
+        public static final Builder tier2 = new Builder("Tier 2").setEnergyCons(200).setRange(3).setMaxEntities(10).setMaxUpgrade(2).setSpawnTime(20).setTileEntity(ModTileEntities.FE_SPAWNER_TIER2);
 
         public int range = 4;
         public int maxEntities = 5;
@@ -100,15 +100,10 @@ public class FESpawner extends Block  {
         public int spawnTime = 40;
         public RegistryObject<TileEntityType<FESpawnerTE>> tileEntity;
         public int energyCons;
+        public final String name;
 
-        public Builder() {}
-
-        public Builder(final int range, final int maxEntities, final int upgradeLimit, final RegistryObject<TileEntityType<FESpawnerTE>> tileEntity, final int energyCons) {
-            this.range = range;
-            this.maxEntities = maxEntities;
-            this.upgradeLimit = upgradeLimit;
-            this.tileEntity = tileEntity;
-            this.energyCons = energyCons;
+        public Builder(String name) {
+            this.name = name;
         }
 
         public Builder setEnergyCons(int energyCons) {

@@ -38,7 +38,7 @@ public class SpawnerInfo extends Item {
             CompoundNBT SpawnData = (CompoundNBT) nbt.get("SpawnData");
             assert SpawnData != null;
             player.displayClientMessage(new StringTextComponent("NBT Data : " + SpawnData.getString("id")), false);
-        } else if (FESpawner.isB(blockState.getBlock())) {
+        } else if (blockState.getBlock().is(ModBlocks.FE_SPAWNER.get()) || blockState.getBlock().is(ModBlocks.FE_SPAWNER_TIER2.get())) {
             TileEntity tileEntity = world.getBlockEntity(lookPos);
             assert tileEntity != null;
             final CompoundNBT nbt = tileEntity.save(new CompoundNBT());

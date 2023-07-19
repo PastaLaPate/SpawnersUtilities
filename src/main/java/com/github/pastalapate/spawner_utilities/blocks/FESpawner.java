@@ -80,15 +80,6 @@ public class FESpawner extends Block  {
         return BlockRenderType.MODEL;
     }
 
-    public static boolean isB(Block block) {
-        for (RegistryObject<Block> tier : tiers) {
-            if (block.is(tier.get())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public static class Builder {
 
         public static final Builder tier1 = new Builder("Tier 1").setEnergyCons(100).setRange(4).setMaxEntities(5).setMaxUpgrade(0).setSpawnTime(40).setTileEntity(ModTileEntities.FE_SPAWNER);

@@ -5,7 +5,7 @@ import com.github.pastalapate.spawner_utilities.blocks.FESpawner;
 import com.github.pastalapate.spawner_utilities.energy.ModEnergyStorage;
 import com.github.pastalapate.spawner_utilities.gui.FESpawnerGUI;
 import com.github.pastalapate.spawner_utilities.init.ModItems;
-import com.github.pastalapate.spawner_utilities.init.ModTileEntities;
+import com.github.pastalapate.spawner_utilities.items.AbstractUpgrade;
 import com.github.pastalapate.spawner_utilities.networking.ModMessages;
 import com.github.pastalapate.spawner_utilities.networking.packets.EnergySyncS2CPacket;
 import com.github.pastalapate.spawner_utilities.networking.packets.ItemStackSyncS2CPacket;
@@ -93,6 +93,8 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
             public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
                 if (slot == 0) {
                     return stack.getItem() == ModItems.SOUL_CONTAINER.get();
+                } else if (slot < upgradeLimit) {
+                    return stack.getItem() instanceof AbstractUpgrade;
                 } else {
                     return super.isItemValid(slot, stack);
                 }

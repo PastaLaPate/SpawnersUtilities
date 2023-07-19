@@ -13,6 +13,7 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.monster.GhastEntity;
+import net.minecraft.entity.monster.RavagerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
@@ -29,6 +30,7 @@ public class SoulCapturer extends Item {
         excludedEntities.add(WitherEntity.class);
         excludedEntities.add(EnderDragonEntity.class);
         excludedEntities.add(GhastEntity.class);
+        excludedEntities.add(RavagerEntity.class);
     }
 
     private final ImmutableMultimap<Attribute, AttributeModifier> attributesModifiers;
@@ -63,7 +65,12 @@ public class SoulCapturer extends Item {
             nbt.putString("entity", Objects.requireNonNull(hurted.getType().getRegistryName()).toString());
             itemWhoHurt.setTag(nbt);
             hurted.kill();
-            ModMessages.sendToServer(new DamageSyncC2SPacket(1, itemWhoHurt));
+            itemWhoHurt.setDamageValue(itemWhoHurt.getDamageValue() + 1);
+            if (itemWhoHurt.getDamageValue() >= itemWhoHurt.getMaxDamage()) {
+                player.broadcastBreakEvent(EquipmentSlotType.MAINHAND);
+                player.inventory.removeItem(itemWhoHurt);
+            }
+            return true;
         }
         return super.hurtEnemy(itemWhoHurt, hurted, author);
     }

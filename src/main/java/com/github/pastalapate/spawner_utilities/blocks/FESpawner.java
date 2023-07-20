@@ -46,6 +46,8 @@ public class FESpawner extends Block  {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
+    @SuppressWarnings("deprecation")
     public void onRemove(BlockState p_196243_1_, World p_196243_2_, BlockPos p_196243_3_, BlockState p_196243_4_, boolean p_196243_5_) {
         TileEntity entity = p_196243_2_.getBlockEntity(p_196243_3_);
         if (entity instanceof FESpawnerTE) {

@@ -3,9 +3,9 @@ package com.github.pastalapate.spawner_utilities.items;
 import net.minecraft.item.Item;
 
 public abstract class AbstractUpgrade extends Item implements IUpgrade {
-    private int supRange;
-    private int supEntity;
-    private double supTime;
+    private final int supRange;
+    private final int supEntity;
+    private final double supTime;
 
     public AbstractUpgrade(Properties properties, int sR, int sE, double sT) {
         super(properties);

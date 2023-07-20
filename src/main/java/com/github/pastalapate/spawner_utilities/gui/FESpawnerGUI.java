@@ -9,7 +9,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -18,23 +17,20 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.SlotItemHandler;
-import org.apache.logging.log4j.Level;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 public class FESpawnerGUI extends Container {
 
     public final FESpawnerTE tileEntity;
-    public int x, y, z;
+    public final int x, y, z;
     public final PlayerEntity entity;
     public final World world;
 
@@ -166,6 +162,7 @@ public class FESpawnerGUI extends Container {
 
         @Override
         @ParametersAreNonnullByDefault
+        @SuppressWarnings("deprecation")
         protected void renderBg(MatrixStack ms, float partialTicks, int gx, int gy) {
             RenderSystem.color4f(1, 1, 1, 1);
             RenderSystem.enableBlend();
@@ -208,11 +205,6 @@ public class FESpawnerGUI extends Container {
                 return true;
             }
             return super.keyPressed(key, b, c);
-        }
-
-        @Override
-        public void tick() {
-            super.tick();
         }
 
         @Override

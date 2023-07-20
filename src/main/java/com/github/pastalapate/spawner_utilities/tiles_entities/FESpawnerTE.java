@@ -41,7 +41,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.util.Supplier;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -51,12 +50,11 @@ import java.util.Random;
 public class FESpawnerTE extends TileEntity implements INamedContainerProvider, ITickableTileEntity {
     public final int upgradeLimit;
     private final FESpawner.Builder builder;
-    public ModEnergyStorage energyStorage;
+    public final ModEnergyStorage energyStorage;
 
     public final ItemStackHandler itemHandler;
 
     private int timer = 0;
-    private boolean active = true;
     private EntityType<?> entityType = null;
     private LazyOptional<IEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
@@ -65,7 +63,7 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
     public int instance_id;
     public int entityCount;
     public int spawnTime;
-    public int energyCons;
+    public final int energyCons;
     private final String tierName;
 
     public FESpawnerTE(FESpawner.Builder builder) {
@@ -122,7 +120,7 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
         boolean empty = item.isEmpty();
         if (!empty && item.getItem() == ModItems.SOUL_CONTAINER.get() && item.getTag() != null) {
             entityType = EntityType.byString(item.getTag().getString("entity")).orElse(null);
-            active = energyStorage.getEnergyStored() >= 100 && entityType != null && entityCount < entityLimit;
+            boolean active = energyStorage.getEnergyStored() >= 100 && entityType != null && entityCount < entityLimit;
             if (!this.level.isClientSide() && active) {
                 this.timer++;
                 energyStorage.extractEnergy(energyCons, false);

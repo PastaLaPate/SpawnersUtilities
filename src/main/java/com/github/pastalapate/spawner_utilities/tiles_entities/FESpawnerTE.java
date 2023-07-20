@@ -163,6 +163,7 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
         spawnTime = builder.spawnTime;
         entityLimit = builder.maxEntities;
         spawnRange = builder.range;
+        needRedstone = false;
         for (int i = 0; i < itemHandler.getSlots(); i++) {
             ItemStack slot = itemHandler.getStackInSlot(i);
             if (!slot.isEmpty()) {
@@ -175,6 +176,8 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
                 } else if (slot.getItem() == ModItems.RANGE_UPGRADE.get()) {
                     RangeUpgrade upgrade = (RangeUpgrade) slot.getItem();
                     spawnRange += upgrade.getSupRange();
+                } else if (slot.getItem() == ModItems.REDSTONE_UPGRADE.get()) {
+                    needRedstone = true;
                 }
             }
         }

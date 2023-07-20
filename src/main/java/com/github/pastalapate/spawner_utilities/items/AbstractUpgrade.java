@@ -1,5 +1,6 @@
 package com.github.pastalapate.spawner_utilities.items;
 
+import com.github.pastalapate.spawner_utilities.init.ModGroup;
 import net.minecraft.item.Item;
 
 public abstract class AbstractUpgrade extends Item implements IUpgrade {
@@ -7,8 +8,8 @@ public abstract class AbstractUpgrade extends Item implements IUpgrade {
     private final int supEntity;
     private final double supTime;
 
-    public AbstractUpgrade(Properties properties, int sR, int sE, double sT) {
-        super(properties);
+    public AbstractUpgrade(int sR, int sE, double sT) {
+        super(new Properties().tab(ModGroup.instance).setNoRepair().stacksTo(64));
         this.supRange = sR;
         this.supEntity = sE;
         this.supTime = sT;

@@ -19,4 +19,5 @@ public class ModItems {
     public static final RegistryObject<Item> SPEED_UPGRADE = ITEMS.register("speed_upgrade", SpeedUpgrade::new);
     public static final RegistryObject<Item> ENTITY_UPGRADE = ITEMS.register("entity_upgrade", EntityUpgrade::new);
     public static final RegistryObject<Item> RANGE_UPGRADE = ITEMS.register("range_upgrade", RangeUpgrade::new);
+    public static final RegistryObject<Item> REDSTONE_UPGRADE = ITEMS.register("redstone_upgrade", RedstoneUpgrade::new);
 }

@@ -5,6 +5,6 @@ import com.github.pastalapate.spawner_utilities.init.ModGroup;
 public class SpeedUpgrade extends AbstractUpgrade {
     public SpeedUpgrade() {
         // speed - (speed * boost)
-        super(new Properties().tab(ModGroup.instance).setNoRepair().stacksTo(64), 0, 0, 0.25);
+        super(0, 0, 0.25);
     }
 }

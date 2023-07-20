@@ -2,11 +2,8 @@ package com.github.pastalapate.spawner_utilities.items;
 
 import com.github.pastalapate.spawner_utilities.init.ModGroup;
 import com.github.pastalapate.spawner_utilities.init.ModItems;
-import com.github.pastalapate.spawner_utilities.networking.ModMessages;
-import com.github.pastalapate.spawner_utilities.networking.packets.DamageSyncC2SPacket;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -19,10 +16,8 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.util.Hand;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
@@ -69,9 +64,12 @@ public class SoulCapturer extends Item {
             nbt.putString("entity", Objects.requireNonNull(hurted.getType().getRegistryName()).toString());
             itemWhoHurt.setTag(nbt);
             hurted.kill();
-            // TODO Fix durability
             return true;
         }
-        return super.hurtEnemy(itemWhoHurt, hurted, author);
+        itemWhoHurt.hurtAndBreak(1, hurted, (entity) -> {
+            entity.broadcastBreakEvent(EquipmentSlotType.MAINHAND);
+            author.broadcastBreakEvent(Hand.MAIN_HAND);
+        });
+        return true;
     }
 }

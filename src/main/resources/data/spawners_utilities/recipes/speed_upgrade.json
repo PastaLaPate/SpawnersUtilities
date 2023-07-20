@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " X ",
+    "X#X",
+    " X "
+  ],
+  "key": {
+    "#": {
+      "item": "spawners_utilities:basic_upgrade"
+    },
+    "X": {
+      "tag": "minecraft:diamond"
+    }
+  },
+  "result": {
+    "item": "spawners_utilities:basic_upgrade"
+  }
+}

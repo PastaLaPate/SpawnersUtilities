@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "spawners_utilities:item/basic_upgrade"
+  }
+}

@@ -15,6 +15,8 @@ import com.github.pastalapate.spawner_utilities.networking.packets.ItemStackSync
 import io.netty.buffer.Unpooled;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.DispenserBlock;
+import net.minecraft.block.PistonBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.ItemEntity;
@@ -25,6 +27,7 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.tileentity.DispenserTileEntity;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -65,6 +68,7 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
     public int spawnTime;
     public final int energyCons;
     private final String tierName;
+    private boolean needRedstone = false;
 
     public FESpawnerTE(FESpawner.Builder builder) {
         super(builder.tileEntity.get());
@@ -120,7 +124,17 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
         boolean empty = item.isEmpty();
         if (!empty && item.getItem() == ModItems.SOUL_CONTAINER.get() && item.getTag() != null) {
             entityType = EntityType.byString(item.getTag().getString("entity")).orElse(null);
-            boolean active = energyStorage.getEnergyStored() >= 100 && entityType != null && entityCount < entityLimit;
+            boolean redstoneActive = true;
+            if (needRedstone) {
+                redstoneActive = false;
+                for (Direction value : Direction.values()) {
+                    if (level.hasSignal(worldPosition, value)) {
+                        redstoneActive = true;
+                        break;
+                    }
+                }
+            }
+            boolean active = redstoneActive && energyStorage.getEnergyStored() >= 100 && entityType != null && entityCount < entityLimit;
             if (!this.level.isClientSide() && active) {
                 this.timer++;
                 energyStorage.extractEnergy(energyCons, false);

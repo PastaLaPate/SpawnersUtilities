@@ -1,8 +1,17 @@
-# SpawnerUtilities
-### By PastaLaPate
+# Spawner Utilities
+A mod who add spawners.
+## Features
+This mod add for the moment a electric spawner. Which can be upgraded with upgrades.
+## Quick start
+Create a soul container, a soul capturer and a fe spawner.
+Kill a mob using the soul capturer. The mob soul is now in the soul container.
 
-This mod add spawners who work with energy (FE) and a lot of another features.
-The feature who will come are tiered spawners with upgrades.
+Put the soul container into the fe spawner and it's done.
+
+## Dependecies
+
+- Copper ingots
+- Copper plates
 
 ## Contribute
 (yea you can contribute baby)

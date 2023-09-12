@@ -1,5 +1,7 @@
 package com.github.pastalapate.spawner_utilities.tiles_entities;
 
+import com.github.pastalapate.spawner_utilities.SpawnerUtilities;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,10 +11,12 @@ public class FESpawnerTEManager {
     private static int nextInstanceID = 1;
 
     private FESpawnerTEManager() {
-        // Private constructor to prevent instantiation
     }
 
     public static void registerInstance(FESpawnerTE instance) {
+        if (instances.contains(instance)) {
+            return;
+        }
         instance.instance_id = nextInstanceID++;
         instances.add(instance);
     }

@@ -11,7 +11,7 @@ public class ModBlockModelProvider extends BlockModelProvider {
 
     @Override
     protected void registerModels() {
-        create("fe_spawner");
+        create("fe_spawner_tier1");
         create("fe_spawner_tier2");
         create("spawner_base");
     }

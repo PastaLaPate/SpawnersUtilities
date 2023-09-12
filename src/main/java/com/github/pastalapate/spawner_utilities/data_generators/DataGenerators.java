@@ -16,5 +16,6 @@ public class DataGenerators {
         generator.addProvider(new ModBlockModelProvider(generator, SpawnerUtilities.MOD_ID, event.getExistingFileHelper()));
         generator.addProvider(new ModItemModelProvider(generator, SpawnerUtilities.MOD_ID, event.getExistingFileHelper()));
         generator.addProvider(new ModLanguageProvider(generator, SpawnerUtilities.MOD_ID));
+        generator.addProvider(new ModBlockStateProvider(generator, event.getExistingFileHelper()));
     }
 }

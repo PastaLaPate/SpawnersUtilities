@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "spawners_utilities:block/spawner_base"
+    }
+  }
+}

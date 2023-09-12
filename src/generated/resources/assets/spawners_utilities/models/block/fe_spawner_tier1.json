@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "spawners_utilities:block/fe_spawner_tier1"
+  }
+}

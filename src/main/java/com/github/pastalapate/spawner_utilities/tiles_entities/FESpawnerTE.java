@@ -116,12 +116,18 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
     }
 
     @Override
+    public void onChunkUnloaded() {
+        entityCount = 0;
+    }
+
+    @Override
     public void tick() {
         updateUpgrades();
         if (spawnRange == 0) spawnRange = 5;
         assert this.level != null;
         ItemStack item = itemHandler.getStackInSlot(0);
         boolean empty = item.isEmpty();
+        SpawnerUtilities.LOGGER.debug("Empty : {} Item equal to SOUL CONTAINER : {} Tag : {} Instance ID : {}", !empty,item.getItem() == ModItems.SOUL_CONTAINER.get(), item.getTag(), instance_id);
         if (!empty && item.getItem() == ModItems.SOUL_CONTAINER.get() && item.getTag() != null) {
             entityType = EntityType.byString(item.getTag().getString("entity")).orElse(null);
             boolean redstoneActive = true;
@@ -156,6 +162,8 @@ public class FESpawnerTE extends TileEntity implements INamedContainerProvider, 
                     }
                 }
             }
+        } else {
+            SpawnerUtilities.LOGGER.debug("BLOCKED");
         }
     }
 

@@ -3,7 +3,6 @@ package com.github.pastalapate.spawner_utilities.data_generators;
 import com.github.pastalapate.spawner_utilities.init.ModBlocks;
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
-import com.sun.org.apache.xerces.internal.impl.dv.ValidationContext;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.LootTableProvider;

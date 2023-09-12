@@ -16,7 +16,7 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        withExistingParent("fe_spawner_tier1", modLoc("block/fe_spawner"));
+        withExistingParent("fe_spawner_tier1", modLoc("block/fe_spawner_tier1"));
         withExistingParent("fe_spawner_tier2", modLoc("block/fe_spawner_tier2"));
         withExistingParent("spawner_base", modLoc("block/spawner_base"));
         create("soul_capturer", itemHandheld);

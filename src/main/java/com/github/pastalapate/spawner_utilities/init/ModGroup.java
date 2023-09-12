@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 
 public class ModGroup extends ItemGroup {
 
-    public static final ModGroup instance = new ModGroup(ItemGroup.TABS.length, "Spawners Utilities");
+    public static final ModGroup instance = new ModGroup(ItemGroup.TABS.length, "spawners_utilities");
 
     private ModGroup(int index, String label) {
         super(index, label);
@@ -17,4 +17,5 @@ public class ModGroup extends ItemGroup {
     public ItemStack makeIcon() {
         return new ItemStack(ModItems.SPAWNER_INFO.get());
     }
+
 }

@@ -14,6 +14,5 @@ Put the soul container into the fe spawner and it's done.
 - Copper plates
 
 ## Contribute
-(yea you can contribute baby)
 By doing pull request lol.
 Do tests with Mekanism (vry good mod btw).

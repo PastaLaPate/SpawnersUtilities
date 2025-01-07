@@ -24,9 +24,13 @@ public class SoulContainer extends Item {
         super.appendHoverText(stack, world, tooltip, flag);
 
         CompoundNBT nbt = stack.getTag();
-        if (nbt != null && nbt.contains("entity")) {
+        if (nbt != null && nbt.contains("entity") && nbt.contains("entity_count")) {
+            int neededEntities = 8;
+            if (nbt.contains("needed_entity")) {
+                neededEntities = nbt.getInt("needed_entity");
+            }
             String capturedEntity = nbt.getString("entity");
-            tooltip.add(new StringTextComponent("Captured Entity: " + capturedEntity));
+            tooltip.add(new StringTextComponent("Captured Entity: " + capturedEntity + " (" + nbt.getInt("entity_count") + "/" + neededEntities +")"));
         }
     }
 }

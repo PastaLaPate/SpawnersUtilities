@@ -53,7 +53,10 @@ public class SoulCapturer extends Item {
         ItemStack container = null;
         for (ItemStack item : player.inventory.items) {
             if (item.getDescriptionId().equals(ModItems.SOUL_CONTAINER.get().getDescriptionId())) {
-                if (!item.getOrCreateTag().contains("entity")) {
+                if ((item.getOrCreateTag().contains("entity") 
+                    && item.getOrCreateTag().getString("entity") == hurted.getType().getRegistryName() 
+                    && item.getorCreateTag().getInt("entity_count") <= (nbt.contains("needed_entity") ? nbt.getInt("needed_entity") : 8)) ||
+                    !item.getOrCreateTag().contains("entity")) {
                     container = item;
                     break;
                 }
@@ -62,6 +65,7 @@ public class SoulCapturer extends Item {
         if (!excludedEntities.contains(hurted.getClass()) && hurted.getHealth() <= 4f && container != null) {
             CompoundNBT nbt = container.getOrCreateTag();
             nbt.putString("entity", Objects.requireNonNull(hurted.getType().getRegistryName()).toString());
+            nbt.putInt("entity_count", (nbt.contains("entity_count") ? nbt.getInt("needed_count")+1 : 1));
             itemWhoHurt.setTag(nbt);
             hurted.kill();
             return true;
